@@ -5,7 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!zip) {
             alert('郵便番号を入力してください');
             return;
+        } else if (zip.match(/^\d{3}-\d{4}$/) == null) {
+            alert('郵便番号が正しくありません');
+            return;
         }
+
+
 
         fetch('Searchaddress.php', {
             method: 'POST',
