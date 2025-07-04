@@ -58,9 +58,10 @@ class Validator
             $api_address = $this->lookupAddressByPostalCode($data['postal_code']);
 
             if ($api_address) {
+                $checkadd = $api_address['city'] . $api_address['town'];
                 if ($data['prefecture'] !== $api_address['prefecture']) {
                     $this->error_message['address'] = '郵便番号と都道府県が一致しません';
-                } elseif (strpos($data['city_town'], $api_address['city']) === false) {
+                } elseif (strpos($data['city_town'], $checkadd) === false) {
                     $this->error_message['address'] = '郵便番号と市区町村が一致しません';
                 }
             } else {
