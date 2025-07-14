@@ -443,12 +443,22 @@ textarea+div {
     padding: 0px 10px;
 }
 
-.birth-selects select.form-control {
-    flex: 1;
-    min-width: 110px;
-    margin: 0px 11px;
-    max-width: 110px;
+.birth-selects {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 0px 0px;
+    gap: 4px;
 }
+
+.birth-selects select {
+    width: 60px !important;
+    min-width: unset !important;
+    max-width: unset !important;
+}
+
+
+
 
 .postal-row {
     display: flex;
@@ -522,7 +532,7 @@ input.readonly-field[type="text"] {
 }
 
 /* -------------------------------------------------------------------
-   ↓ ここから変更・追加箇所
+↓ ここから変更・追加箇所
    ------------------------------------------------------------------- */
 
 /* 【3】共通テーブル（dashboard.php と Csvpreview.php で使い回し可） */
@@ -640,7 +650,7 @@ input.readonly-field[type="text"] {
 }
 
 /* ---------------------------------------------------
-   dashboard.php 用の追加スタイル
+dashboard.php 用の追加スタイル
    --------------------------------------------------- */
 
 .name-sreach form {
@@ -689,5 +699,5 @@ input.readonly-field[type="text"] {
 }
 
 /* -------------------------------------------------------------------
-   ↑ ここまで変更・追加箇所
+↑ ここまで変更・追加箇所
    ------------------------------------------------------------------- */
