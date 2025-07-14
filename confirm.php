@@ -15,6 +15,10 @@
  * **   登録画面で入力した情報を画面に表示する
  */
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // 1.セッションの開始
 session_cache_limiter('none');
 session_start();
@@ -30,7 +34,7 @@ if (!isset($_SESSION['input_data'])) {
 $_POST = $_SESSION['input_data'];
 
 // 2.セッションを破棄する
-session_destroy();
+
 
 // 3.htmlの描画
 ?>

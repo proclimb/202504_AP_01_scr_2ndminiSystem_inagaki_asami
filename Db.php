@@ -11,26 +11,41 @@
  * **
  * **
  */
-// 1.DB接続設定
-$host = 'localhost';
-$dbname = '****';
-$user = '****';
-$password = '****';
-$charset = 'utf8mb4';
 
-// 2.DSN（データべース名）
-$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// 3.エラー時に例外を投げる設定
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-];
+class Db
+{
+    public static function getPdoInstance()
+    {
 
-// 4.PDOをインスタンス化
-try {
-    $pdo = new PDO($dsn, $user, $password, $options);
-} catch (PDOException $e) {
-    // エラー時にエラーメッセージを出力
-    die("DB接続に失敗しました: " . $e->getMessage());
+
+        // 1.DB接続設定
+        $host = 'localhost';
+        $dbname = 'minisystem_relation';
+        $user = 'root';
+        $password = 'proclimb';
+        $charset = 'utf8mb4';
+
+        // 2.DSN（データべース名）
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+
+        // 3.エラー時に例外を投げる設定
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ];
+
+        // 4.PDOをインスタンス化
+        try {
+            $pdo = new PDO($dsn, $user, $password, $options);
+        } catch (PDOException $e) {
+            // エラー時にエラーメッセージを出力
+            die("DB接続に失敗しました: " . $e->getMessage());
+        }
+
+        return $pdo;
+    }
 }

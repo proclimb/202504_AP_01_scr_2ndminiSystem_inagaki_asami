@@ -16,10 +16,16 @@
  * **   登録完了のメッセージを表示します
  */
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 //  1.DB接続情報、クラス定義の読み込み
 require_once 'Db.php';
 require_once 'User.php';
 require_once 'Address.php';
+
+$pdo = Db::getPdoInstance();
 
 // 2.$_POSTから入力情報を各変数へ代入
 //   ※POSTメソッドで送信された場合は、入力情報を代入する
@@ -62,7 +68,7 @@ $address->create([
     'prefecture' => $_POST['prefecture'],
     'city_town' => $_POST['city_town'],
     'building' => $_POST['building']
-])
+]);
 
 // 4.html の描画
 ?>

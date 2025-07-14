@@ -16,9 +16,15 @@
  * **   削除完了のメッセージを表示します
  */
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 //  1.DB接続情報、クラス定義の読み込み
 require_once 'Db.php';
 require_once 'User.php';
+
+$pdo = Db::getPdoInstance();
 
 // 2.更新・削除画面からの入力値を変数に設定
 $id = $_POST["id"];

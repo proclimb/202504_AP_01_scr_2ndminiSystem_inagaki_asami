@@ -6,6 +6,10 @@
 // OK ボタンでインポート画面(Csvimport.php)に飛ばします。
 // ──────────────────────────────────────────
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'Db.php'; // ※Db.php で PDO 接続 ($pdo) を行っている前提
 
 // CSV ファイルのパス（環境に合わせて変更）

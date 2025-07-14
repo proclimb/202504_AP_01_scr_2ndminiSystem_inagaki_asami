@@ -15,13 +15,45 @@
  * **   更新完了のメッセージを表示します
  */
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
+
 //  1.DB接続情報、クラス定義の読み込み
-require_once 'Db.php';
-require_once 'User.php';
-require_once 'Address.php';
-require_once 'FileBlobHelper.php';
+require_once __DIR__ . '/Db.php';
+require_once __DIR__ . '/User.php';
+require_once __DIR__ . '/Address.php';
+require_once __DIR__ . '/FileBlobHelper.php';
+require_once __DIR__ . '/Validator.php';
+require_once __DIR__ . '/UserAddress.php';
+
+// Dbクラスが正しく読み込まれているか確認
+if (!class_exists('Db')) {
+    die('Db class not found. Please check that Db.php exists and defines the Db class.');
+}
+
+// DbクラスからPDOインスタンスを取得
+$pdo = Db::getPdoInstance();
+
+$input = $_POST;
+$validator = new Validator(); // クラス利用
+
+if (!empty($input['birth_year']) && !empty($input['birth_month']) && !empty($input['birth_day'])) {
+    $birth_display = htmlspecialchars($input['birth_year'] . '年' . $input['birth_month'] . '月' . $input['birth_day'] . '日');
+} else {
+    $birth_display = '未入力';
+}
+
+if (!$validator->validate($input)) {
+    echo '<h2>バリデーションエラー内容：</h2>';
+    echo '<pre>';
+    print_r($validator->getErrors());
+    echo '</pre>';
+    exit;
+}
 
 // 2. 入力データ取得
 // 2-1. ユーザーデータ取得
@@ -32,6 +64,7 @@ $userData = [
     'gender_flag'  => $_POST['gender_flag'],
     'tel'          => $_POST['tel'],
     'email'        => $_POST['email'],
+    'birth_date'   => $_POST['birth_year'] . '-' . $_POST['birth_month'] . '-' . $_POST['birth_day']
 ];
 
 

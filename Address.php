@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 class UserAddress
 {
     private $pdo;
@@ -36,7 +41,7 @@ class UserAddress
     // ユーザーIDから住所取得
     public function findByUserId(int $userId): ?array
     {
-        $sql = "SELECT * FROM addresses WHERE user_id = :user_id LIMIT 1";
+        $sql = "SELECT * FROM user_addresses WHERE user_id = :user_id LIMIT 1";
 
         try {
             $stmt = $this->pdo->prepare($sql);

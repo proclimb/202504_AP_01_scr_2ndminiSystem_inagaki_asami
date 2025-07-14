@@ -1,5 +1,10 @@
 <?php
 //ユーザー情報のDB操作処理
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 class User
 {
     private $pdo;
@@ -52,6 +57,7 @@ class User
                 SET name = :name,
                     kana = :kana,
                     gender_flag = :gender_flag,
+                    birth_date = :birth_date,
                     tel = :tel,
                     email = :email,
                     updated_at = now()
@@ -62,11 +68,14 @@ class User
             ':name'         => $data['name'],
             ':kana'         => $data['kana'],
             ':gender_flag'  => $data['gender_flag'],
+            ':birth_date'   => $data['birth_date'],
             ':email'        => $data['email'],
             ':tel'          => $data['tel'],
             ':id'           => $id
         ]);
     }
+
+
 
     // ユーザ検索(1件検索)
     public function findById($id)

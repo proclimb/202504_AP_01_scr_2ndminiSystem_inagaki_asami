@@ -5,6 +5,10 @@
 // user_documents テーブルから最新レコードの BLOB 画像を取得して表示する。
 // -----------------------------------------------------
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // 1) 共通設定読み込み（PDO インスタンスを生成するファイルを用意しておく）
 require_once 'Db.php'; // 例: $pdo = new PDO(...);
 

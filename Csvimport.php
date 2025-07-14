@@ -6,6 +6,10 @@
 // address_master テーブルに丸ごと取り込む。
 // ──────────────────────────────────────────
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'Db.php'; // ※Db.php で PDO 接続 ($pdo) を行っている前提
 
 // 1) CSV ファイルのパス

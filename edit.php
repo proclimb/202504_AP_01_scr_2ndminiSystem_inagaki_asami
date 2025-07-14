@@ -19,9 +19,20 @@
  * ** 4.html を描画
  */
 
-//  1.DB接続情報、クラス定義の読み込み
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// 1.DB接続情報、クラス定義の読み込み
+
+session_start();
+
+
 require_once 'Db.php';
 require_once 'User.php';
+
+$pdo = Db::getPdoInstance();
 
 // 2.ダッシュボードから送信した変数を設定
 $id = $_GET['id'];
@@ -31,6 +42,7 @@ $user = new User($pdo);
 
 // 3-2.UserクラスのfindById()メソッドで1件検索
 $_POST = $user->findById($id);
+
 
 // 4.html の描画
 ?>
@@ -42,7 +54,6 @@ $_POST = $user->findById($id);
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
-    <script src="contact.js"></script>
 </head>
 
 <body>
@@ -100,6 +111,8 @@ $_POST = $user->findById($id);
                             <?= ($_POST['gender_flag'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
                 </div>
+
+
                 <div>
                     <label>生年月日<span>必須</span></label>
                     <input
@@ -186,7 +199,7 @@ $_POST = $user->findById($id);
                     </div>
                 </div>
             </div>
-            <button type="button" onclick="validate()">更新</button>
+            <button type="submit">更新</button>
             <input type="button" value="ダッシュボードに戻る" onclick="history.back(-1)">
         </form>
         <form action="delete.php" method="post" name="delete">

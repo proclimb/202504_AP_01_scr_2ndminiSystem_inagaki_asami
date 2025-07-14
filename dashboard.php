@@ -19,11 +19,18 @@
  * **   編集のリンクに関しては、idの値をURLに設定してGET送信で「更新・削除」へidを渡します
  */
 
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 //  1.DB接続情報、クラス定義の読み込み
 require_once 'Db.php';
 require_once 'User.php';
 require_once 'Sort.php';      // ソート関連の処理と sortLink() 関数を定義
 require_once 'Page.php';      // ページネーション関連の処理と paginationLinks() 関数を定義
+
+$pdo = Db::getPdoInstance();
 
 // ---------------------------------------------
 // 1. リクエストパラメータ取得・初期化
