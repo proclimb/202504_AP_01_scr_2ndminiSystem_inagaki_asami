@@ -115,12 +115,51 @@ $_POST = $user->findById($id);
 
                 <div>
                     <label>生年月日<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="birth_date"
-                        value="<?php echo $_POST['birth_date'] ?>"
-                        readonly
-                        class="readonly-field">
+                    <?php
+                    $birth = explode('-', $_POST['birth_date'] ?? '');
+                    $birth_year = $birth[0] ?? '';
+                    $birth_month = $birth[1] ?? '';
+                    $birth_day = $birth[2] ?? '';
+                    ?>
+
+                    <div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <!-- 年 -->
+                            <select name="birth_year">
+                                <option value="">-- 年 --</option>
+                                <?php
+                                for ($y = date('Y'); $y >= 1900; $y--) {
+                                    $selected = ($birth_year == $y) ? 'selected' : '';
+                                    echo "<option value=\"$y\" $selected>{$y}年</option>";
+                                }
+                                ?>
+                            </select>
+
+                            <!-- 月 -->
+                            <select name="birth_month">
+                                <option value="">-- 月 --</option>
+                                <?php
+                                for ($m = 1; $m <= 12; $m++) {
+                                    $selected = ((int)$birth_month === $m) ? 'selected' : '';
+                                    echo "<option value=\"$m\" $selected>{$m}月</option>";
+                                }
+                                ?>
+                            </select>
+
+                            <!-- 日 -->
+                            <select name="birth_day">
+                                <option value="">-- 日 --</option>
+                                <?php
+                                for ($d = 1; $d <= 31; $d++) {
+                                    $selected = ((int)$birth_day === $d) ? 'selected' : '';
+                                    echo "<option value=\"$d\" $selected>{$d}日</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div>
                     <label>郵便番号<span>必須</span></label>
