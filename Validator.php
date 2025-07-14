@@ -45,6 +45,7 @@ class Validator
 
         // 郵便番号
         if (empty($data['postal_code'])) {
+
             $this->error_message['postal_code'] = '郵便番号が入力されていません';
         } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $data['postal_code'])) {
             $this->error_message['postal_code'] = '郵便番号が正しくありません';

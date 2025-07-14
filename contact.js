@@ -1,7 +1,30 @@
 /**
  * 各項目の入力を行う
+ *
+ *
  */
+
+// ✅ validate() より前か後に置いてOK！
+
+document.addEventListener("DOMContentLoaded", function () {
+    const nameField = document.getElementById("nameField");
+    const nameError = document.getElementById("nameError");
+
+    nameField.addEventListener("input", function () {
+        const value = this.value.trim();
+        if (value === "") {
+            nameError.textContent = "お名前は必須です";
+            this.classList.add("error-form");
+        } else {
+            nameError.textContent = "";
+            this.classList.remove("error-form");
+        }
+    });
+});
+
 function validate() {
+
+
 
     // 1.エラー有無の初期化(true:エラーなし、false：エラーあり)
     var flag = true;
@@ -73,6 +96,11 @@ function validate() {
             errorElement(document.edit.email, "メールアドレスが正しくありません");
             flag = false;
         }
+    }
+
+    if (document.edit.birth_date.value == "") {
+        errorElement(document.edit.birth_date, "生年月日が入力されていません");
+        flag = false;
     }
 
     // document1 のチェック

@@ -122,129 +122,128 @@ $_POST = $user->findById($id);
                     $birth_day = $birth[2] ?? '';
                     ?>
 
-                    <div>
 
-                        <div style="display: flex; gap: 10px;">
-                            <!-- 年 -->
-                            <select name="birth_year">
-                                <option value="">-- 年 --</option>
-                                <?php
-                                for ($y = date('Y'); $y >= 1900; $y--) {
-                                    $selected = ($birth_year == $y) ? 'selected' : '';
-                                    echo "<option value=\"$y\" $selected>{$y}年</option>";
-                                }
-                                ?>
-                            </select>
+                    <div class="birth-selects" style="display: flex; gap: 10px;">
+                        <!-- 年 -->
+                        <select name="birth_year">
+                            <option value="">-- 年 --</option>
+                            <?php
+                            for ($y = date('Y'); $y >= 1900; $y--) {
+                                $selected = ($birth_year == $y) ? 'selected' : '';
+                                echo "<option value=\"$y\" $selected>{$y}年</option>";
+                            }
+                            ?>
+                        </select>
 
-                            <!-- 月 -->
-                            <select name="birth_month">
-                                <option value="">-- 月 --</option>
-                                <?php
-                                for ($m = 1; $m <= 12; $m++) {
-                                    $selected = ((int)$birth_month === $m) ? 'selected' : '';
-                                    echo "<option value=\"$m\" $selected>{$m}月</option>";
-                                }
-                                ?>
-                            </select>
+                        <!-- 月 -->
+                        <select name="birth_month">
+                            <option value="">-- 月 --</option>
+                            <?php
+                            for ($m = 1; $m <= 12; $m++) {
+                                $selected = ((int)$birth_month === $m) ? 'selected' : '';
+                                echo "<option value=\"$m\" $selected>{$m}月</option>";
+                            }
+                            ?>
+                        </select>
 
-                            <!-- 日 -->
-                            <select name="birth_day">
-                                <option value="">-- 日 --</option>
-                                <?php
-                                for ($d = 1; $d <= 31; $d++) {
-                                    $selected = ((int)$birth_day === $d) ? 'selected' : '';
-                                    echo "<option value=\"$d\" $selected>{$d}日</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
-                <div>
-                    <label>郵便番号<span>必須</span></label>
-                    <div class="postal-row">
-                        <input
-                            class="half-width"
-                            type="text"
-                            name="postal_code"
-                            id="postal_code"
-                            placeholder="例）100-0001"
-                            value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
-                        <button type="button"
-                            class="postal-code-search"
-                            id="searchAddressBtn">住所検索</button>
-                    </div>
-                </div>
-                <div>
-                    <label>住所<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="prefecture"
-                        id="prefecture"
-                        placeholder="都道府県"
-                        value="<?= htmlspecialchars($_POST['prefecture'] ?? '') ?>">
-                    <input
-                        type="text"
-                        name="city_town"
-                        id="city_town"
-                        placeholder="市区町村・番地"
-                        value="<?= htmlspecialchars($_POST['city_town'] ?? '') ?>">
-                    <input
-                        type="text"
-                        name="building"
-                        placeholder="建物名・部屋番号  **省略可**"
-                        value="<?= htmlspecialchars($_POST['building'] ?? '') ?>">
-                </div>
-                <div>
-                    <label>電話番号<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="tel"
-                        placeholder="例）000-000-0000"
-                        value="<?= htmlspecialchars($_POST['tel']) ?>">
-                </div>
-                <div>
-                    <label>メールアドレス<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="email"
-                        placeholder="例）guest@example.com"
-                        value="<?= htmlspecialchars($_POST['email']) ?>">
-                </div>
-                <div>
-                    <label>本人確認書類（表）</label>
-                    <input
-                        type="file"
-                        name="document1"
-                        id="document1"
-                        accept="image/png, image/jpeg, image/jpg">
-                    <span id="filename1" class="filename-display"></span>
-                    <div class="preview-container">
-                        <img id="preview1" src="#" alt="プレビュー画像１" style="display: none; max-width: 200px; margin-top: 8px;">
+                        <!-- 日 -->
+                        <select name="birth_day">
+                            <option value="">-- 日 --</option>
+                            <?php
+                            for ($d = 1; $d <= 31; $d++) {
+                                $selected = ((int)$birth_day === $d) ? 'selected' : '';
+                                echo "<option value=\"$d\" $selected>{$d}日</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
 
-                <div>
-                    <label>本人確認書類（裏）</label>
+            </div>
+            <div>
+                <label>郵便番号<span>必須</span></label>
+                <div class="postal-row">
                     <input
-                        type="file"
-                        name="document2"
-                        id="document2"
-                        accept="image/png, image/jpeg, image/jpg">
-                    <span id="filename2" class="filename-display"></span>
-                    <div class="preview-container">
-                        <img id="preview2" src="#" alt="プレビュー画像２" style="display: none; max-width: 200px; margin-top: 8px;">
-                    </div>
+                        class="half-width"
+                        type="text"
+                        name="postal_code"
+                        id="postal_code"
+                        placeholder="例）100-0001"
+                        value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
+                    <button type="button"
+                        class="postal-code-search"
+                        id="searchAddressBtn">住所検索</button>
                 </div>
             </div>
-            <button type="submit">更新</button>
-            <input type="button" value="ダッシュボードに戻る" onclick="history.back(-1)">
-        </form>
-        <form action="delete.php" method="post" name="delete">
-            <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
-            <button type="submit">削除</button>
-        </form>
+            <div>
+                <label>住所<span>必須</span></label>
+                <input
+                    type="text"
+                    name="prefecture"
+                    id="prefecture"
+                    placeholder="都道府県"
+                    value="<?= htmlspecialchars($_POST['prefecture'] ?? '') ?>">
+                <input
+                    type="text"
+                    name="city_town"
+                    id="city_town"
+                    placeholder="市区町村・番地"
+                    value="<?= htmlspecialchars($_POST['city_town'] ?? '') ?>">
+                <input
+                    type="text"
+                    name="building"
+                    placeholder="建物名・部屋番号  **省略可**"
+                    value="<?= htmlspecialchars($_POST['building'] ?? '') ?>">
+            </div>
+            <div>
+                <label>電話番号<span>必須</span></label>
+                <input
+                    type="text"
+                    name="tel"
+                    placeholder="例）000-000-0000"
+                    value="<?= htmlspecialchars($_POST['tel']) ?>">
+            </div>
+            <div>
+                <label>メールアドレス<span>必須</span></label>
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="例）guest@example.com"
+                    value="<?= htmlspecialchars($_POST['email']) ?>">
+            </div>
+            <div>
+                <label>本人確認書類（表）</label>
+                <input
+                    type="file"
+                    name="document1"
+                    id="document1"
+                    accept="image/png, image/jpeg, image/jpg">
+                <span id="filename1" class="filename-display"></span>
+                <div class="preview-container">
+                    <img id="preview1" src="#" alt="プレビュー画像１" style="display: none; max-width: 200px; margin-top: 8px;">
+                </div>
+            </div>
+
+            <div>
+                <label>本人確認書類（裏）</label>
+                <input
+                    type="file"
+                    name="document2"
+                    id="document2"
+                    accept="image/png, image/jpeg, image/jpg">
+                <span id="filename2" class="filename-display"></span>
+                <div class="preview-container">
+                    <img id="preview2" src="#" alt="プレビュー画像２" style="display: none; max-width: 200px; margin-top: 8px;">
+                </div>
+            </div>
+    </div>
+    <button type="submit">更新</button>
+    <input type="button" value="ダッシュボードに戻る" onclick="history.back(-1)">
+    </form>
+    <form action="delete.php" method="post" name="delete">
+        <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
+        <button type="submit">削除</button>
+    </form>
     </div>
 </body>
 
