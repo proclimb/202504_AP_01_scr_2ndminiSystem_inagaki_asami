@@ -452,7 +452,7 @@ textarea+div {
 }
 
 .birth-selects select {
-    width: 60px !important;
+    width: 120px !important;
     min-width: unset !important;
     max-width: unset !important;
 }
