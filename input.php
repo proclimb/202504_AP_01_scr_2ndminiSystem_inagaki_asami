@@ -59,6 +59,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     }
 }
 
+// session_destroy(); はここで呼ばない
+
+
 // 4.セッションを破棄する
 session_destroy();
 
@@ -219,7 +222,7 @@ session_destroy();
                     <input
                         type="text"
                         id="address"
-                        name="address"
+                        name="prefecture"
                         placeholder="都道府県"
                         value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
                     <div id="addressError" class="error-msg2"></div>
@@ -235,7 +238,7 @@ session_destroy();
                     <input
                         type="text"
                         id="address3"
-                        name="address3"
+                        name="building"
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($old['building'] ?? '') ?>">
                     <?php if (isset($error_message['address'])) : ?>
