@@ -179,19 +179,17 @@ var validateTel = function (val) {
 }
 
 /**
- * ひらがなのチェック
+/**
+ * ひらがなのチェック（全角・半角スペースを許容）
  * @param {*} val チェックする文字列
- * @returns true：ひらがなのみ、false：ひらがな以外の文字がある
+ * @returns true：ひらがな＋スペースのみ、false：その他が含まれる
  */
 var validateKana = function (val) {
-
-    // ひらがな(ぁ～ん)と長音のみであるか
-    if (val.match(/^[ぁ-んー]+$/) == null) {
-        return false;
-    } else {
-        return true;
-    }
+    // ひらがな + 全角スペース(\u3000) + 半角スペース(\u0020)
+    const pattern = /^[\u3040-\u309F\u3000\u0020ー]+$/;
+    return pattern.test(val);
 }
+
 
 
 // contact.js
