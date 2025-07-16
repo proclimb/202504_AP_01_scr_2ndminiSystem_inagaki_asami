@@ -75,27 +75,7 @@ function validate() {
         }
     }
 
-    // document1 のチェック
-    var fileInput1 = document.edit.document1;
-    if (fileInput1 && fileInput1.files.length > 0) {
-        var file1 = fileInput1.files[0];
-        var type1 = file1.type;
-        // PNG もしくは JPEG 以外はエラー
-        if (type1 !== "image/png" && type1 !== "image/jpeg") {
-            errorElement(fileInput1, "ファイル形式は PNG または JPEG のみ許可されています");
-            flag = false;
-        }
-    }
-    // document2 のチェック
-    var fileInput2 = document.edit.document2;
-    if (fileInput2 && fileInput2.files.length > 0) {
-        var file2 = fileInput2.files[0];
-        var type2 = file2.type;
-        if (type2 !== "image/png" && type2 !== "image/jpeg") {
-            errorElement(fileInput2, "ファイル形式は PNG または JPEG のみ許可されています");
-            flag = false;
-        }
-    }
+
 
     // 7.エラーチェック
     if (flag) {
@@ -212,3 +192,114 @@ var validateKana = function (val) {
         return true;
     }
 }
+
+
+// contact.js
+
+document.addEventListener("DOMContentLoaded", function () {
+    const nameField = document.getElementById("nameField");
+    const nameError = document.getElementById("nameError");
+
+    if (nameField && nameError) {
+        nameField.addEventListener("input", function () {
+            if (this.value.trim() === "") {
+                nameError.textContent = "お名前は必須です";
+                this.classList.add("error-form");
+            } else {
+                nameError.textContent = "";
+                this.classList.remove("error-form");
+            }
+        });
+    }
+
+    const kanaField = document.getElementById("kanaField");
+    const kanaError = document.getElementById("kanaError");
+
+    if (kanaField && kanaError) {
+        kanaField.addEventListener("input", function () {
+            if (this.value.trim() === "") {
+                kanaError.textContent = "ふりがなは必須です";
+                this.classList.add("error-form");
+            } else {
+                kanaError.textContent = "";
+                this.classList.remove("error-form");
+            }
+        });
+    }
+
+    // 郵便番号
+    const postalCodeField = document.getElementById("postalCodeField");
+    const postalCodeError = document.getElementById("postalCodeError");
+    if (postalCodeField && postalCodeError) {
+        postalCodeField.addEventListener("input", function () {
+            const val = this.value.trim();
+            const pattern = /^\d{3}-\d{4}$/;
+            if (val === "") {
+                postalCodeError.textContent = "郵便番号は必須です";
+                this.classList.add("error-form");
+            } else if (!pattern.test(val)) {
+                postalCodeError.textContent = "郵便番号の形式が正しくありません（例：123-4567）";
+                this.classList.add("error-form");
+            } else {
+                postalCodeError.textContent = "";
+                this.classList.remove("error-form");
+            }
+        });
+    }
+
+    // 住所（都道府県）
+    const prefectureField = document.getElementById("prefecture");
+    if (prefectureField) {
+        prefectureField.addEventListener("input", function () {
+            if (this.value.trim() === "") {
+                this.classList.add("error-form");
+            } else {
+                this.classList.remove("error-form");
+            }
+        });
+    }
+
+    // 住所（市区町村・番地）
+    const cityTownField = document.getElementById("city_town");
+    if (cityTownField) {
+        cityTownField.addEventListener("input", function () {
+            if (this.value.trim() === "") {
+                this.classList.add("error-form");
+            } else {
+                this.classList.remove("error-form");
+            }
+        });
+    }
+
+    // 電話番号
+    const telField = document.querySelector("input[name='tel']");
+    if (telField) {
+        telField.addEventListener("input", function () {
+            const val = this.value.trim();
+            const pattern = /^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/;
+            if (val === "") {
+                this.classList.add("error-form");
+            } else if (!pattern.test(val)) {
+                this.classList.add("error-form");
+            } else {
+                this.classList.remove("error-form");
+            }
+        });
+    }
+
+    // メールアドレス
+    const emailField = document.querySelector("input[name='email']");
+    if (emailField) {
+        emailField.addEventListener("input", function () {
+            const val = this.value.trim();
+            const pattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            if (val === "") {
+                this.classList.add("error-form");
+            } else if (!pattern.test(val)) {
+                this.classList.add("error-form");
+            } else {
+                this.classList.remove("error-form");
+            }
+        });
+    }
+});

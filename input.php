@@ -75,7 +75,9 @@ session_destroy();
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
+
 </head>
+<script src="contact.js"></script>
 
 <body>
     <div>
@@ -85,7 +87,7 @@ session_destroy();
         <h2>登録画面</h2>
     </div>
     <div>
-        <form action="input.php" method="post" name="form">
+        <form action="input.php" method="post" name="edit" onsubmit="return validate();">
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
@@ -93,9 +95,11 @@ session_destroy();
                     <label>お名前<span>必須</span></label>
                     <input
                         type="text"
+                        id="nameField"
                         name="name"
                         placeholder="例）山田太郎"
                         value="<?= htmlspecialchars($old['name'] ?? '') ?>">
+                    <div id="nameError" class="error-msg"></div>
                     <?php if (isset($error_message['name'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['name']) ?></div>
@@ -105,9 +109,11 @@ session_destroy();
                     <label>ふりがな<span>必須</span></label>
                     <input
                         type="text"
+                        id="kanaField"
                         name="kana"
                         placeholder="例）やまだたろう"
                         value="<?= htmlspecialchars($old['kana'] ?? '') ?>">
+                    <div id="kanaError" class="error-msg"></div>
                     <?php if (isset($error_message['kana'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['kana']) ?></div>
@@ -135,7 +141,7 @@ session_destroy();
                             type="radio"
                             name="gender"
                             value='3'
-                            <?= ($old['gender_flag'] ?? '') == '3'
+                            <?= ($old['gender'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
                 </div>
                 <div>
@@ -193,18 +199,21 @@ session_destroy();
                             class="half-width"
                             type="text"
                             name="postal_code"
-                            id="postal_code"
+                            id="postalCodeField"
                             placeholder="例）100-0001"
                             value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>">
                         <button type="button"
                             class="postal-code-search"
                             id="searchAddressBtn">住所検索</button>
                     </div>
-                    <?php if (isset($error_message['postal_code'])) : ?>
-                        <div class="error-msg2">
-                            <?= htmlspecialchars($error_message['postal_code']) ?></div>
-                    <?php endif ?>
+                    <div id="postalCodeError" class="error-msg2"></div>
+
                 </div>
+                <?php if (isset($error_message['postal_code'])) : ?>
+                    <div class="error-msg2">
+                        <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                <?php endif ?>
+
                 <div>
                     <label>住所<span>必須</span></label>
                     <input
