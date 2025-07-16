@@ -215,22 +215,27 @@ session_destroy();
                 <?php endif ?>
 
                 <div>
-                    <label>住所<span>必須</span></label>
+                    <label for="address">住所<span class="required">必須</span></label>
                     <input
                         type="text"
-                        name="prefecture"
-                        id="prefecture"
+                        id="address"
+                        name="address"
                         placeholder="都道府県"
                         value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
+                    <div id="addressError" class="error-msg2"></div>
+
                     <input
                         type="text"
+                        id="address2"
                         name="city_town"
-                        id="city_town"
                         placeholder="市区町村・番地"
                         value="<?= htmlspecialchars($old['city_town'] ?? '') ?>">
+                    <div id="address2Error" class="error-msg2"></div>
+
                     <input
                         type="text"
-                        name="building"
+                        id="address3"
+                        name="address3"
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($old['building'] ?? '') ?>">
                     <?php if (isset($error_message['address'])) : ?>
@@ -239,24 +244,28 @@ session_destroy();
                     <?php endif ?>
                 </div>
                 <div>
-                    <label>電話番号<span>必須</span></label>
+                    <label for="tel">電話番号<span class="required">必須</span></label>
                     <input
                         type="text"
+                        id="tel"
                         name="tel"
                         placeholder="例）000-000-0000"
                         value="<?= htmlspecialchars($old['tel'] ?? '') ?>">
+                    <div id="telError" class="error-msg2"></div>
                     <?php if (isset($error_message['tel'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['tel']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
-                    <label>メールアドレス<span>必須</span></label>
+                    <label for="email">メールアドレス<span class="required">必須</span></label>
                     <input
-                        type="text"
+                        type="email"
+                        id="email"
                         name="email"
                         placeholder="例）guest@example.com"
                         value="<?= htmlspecialchars($old['email'] ?? '') ?>">
+                    <div id="emailError" class="error-msg2"></div>
                     <?php if (isset($error_message['email'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['email']) ?></div>

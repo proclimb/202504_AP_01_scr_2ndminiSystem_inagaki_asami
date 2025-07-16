@@ -248,56 +248,74 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 住所（都道府県）
-    const prefectureField = document.getElementById("prefecture");
-    if (prefectureField) {
-        prefectureField.addEventListener("input", function () {
+    const addressField = document.getElementById("address");
+    const addressError = document.getElementById("addressError");
+
+    if (addressField && addressError) {
+        addressField.addEventListener("input", function () {
+            const val = this.value.trim();
             if (this.value.trim() === "") {
+                addressError.textContent = "都道府県は必須です";
                 this.classList.add("error-form");
             } else {
+                addressError.textContent = "";
                 this.classList.remove("error-form");
             }
         });
     }
 
     // 住所（市区町村・番地）
-    const cityTownField = document.getElementById("city_town");
-    if (cityTownField) {
-        cityTownField.addEventListener("input", function () {
-            if (this.value.trim() === "") {
+    const address2Field = document.getElementById("address2");
+    const address2Error = document.getElementById("address2Error");
+
+    if (address2Field && address2Error) {
+        address2Field.addEventListener("input", function () {
+            const val = this.value.trim();
+            if (val === "") {
+                address2Error.textContent = "市区町村・番地は必須です";
                 this.classList.add("error-form");
             } else {
+                address2Error.textContent = "";
                 this.classList.remove("error-form");
             }
         });
     }
 
     // 電話番号
-    const telField = document.querySelector("input[name='tel']");
-    if (telField) {
+    const telField = document.getElementById("tel");
+    const telError = document.getElementById("telError");
+    if (telField && telError) {
         telField.addEventListener("input", function () {
             const val = this.value.trim();
             const pattern = /^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/;
             if (val === "") {
+                telError.textContent = "電話番号は必須です";
                 this.classList.add("error-form");
             } else if (!pattern.test(val)) {
+                telError.textContent = "電話番号の形式が正しくありません（例：000-0000-0000）";
                 this.classList.add("error-form");
             } else {
+                telError.textContent = "";
                 this.classList.remove("error-form");
             }
         });
     }
 
     // メールアドレス
-    const emailField = document.querySelector("input[name='email']");
-    if (emailField) {
+    const emailField = document.getElementById("email");
+    const emailError = document.getElementById("emailError");
+    if (emailField && emailError) {
         emailField.addEventListener("input", function () {
             const val = this.value.trim();
             const pattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
             if (val === "") {
+                emailError.textContent = "メールアドレスは必須です";
                 this.classList.add("error-form");
             } else if (!pattern.test(val)) {
+                emailError.textContent = "メールアドレスの形式が正しくありません";
                 this.classList.add("error-form");
             } else {
+                emailError.textContent = "";
                 this.classList.remove("error-form");
             }
         });
