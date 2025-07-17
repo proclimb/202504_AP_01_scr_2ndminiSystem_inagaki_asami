@@ -424,11 +424,15 @@ textarea+div {
 /* 8632 */
 .error-form {
     border-color: #fb9a93 !important;
+    border: 1px solid red;
+    background-color: #ffe6e6;
 }
 
 /* 8636 */
 .error-msg {
     color: red;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 /* 新規追加 */

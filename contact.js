@@ -245,10 +245,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.classList.add("error-form");
             } else if (!pattern.test(val)) {
                 postalCodeError.textContent = "郵便番号の形式が正しくありません（例：123-4567）";
+                postalCodeError.classList.add("error-msg");
                 this.classList.add("error-form");
             } else {
                 postalCodeError.textContent = "";
-                this.classList.remove("error-form");
+                postalCodeError.classList.remove("error-msg");
                 this.classList.remove("error-form");
             }
         });

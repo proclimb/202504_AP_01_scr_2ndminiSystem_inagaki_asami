@@ -204,7 +204,8 @@ session_destroy();
                             type="text"
                             name="postal_code"
                             id="postalCodeField"
-                            placeholder="例）100-0001">
+                            placeholder="例）100-0001"
+                            value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>">
                         <div id="postalCodeError" class="error-msg"></div>
                         <?= htmlspecialchars($old['postal_code'] ?? '') ?>
                         <button type="button"
