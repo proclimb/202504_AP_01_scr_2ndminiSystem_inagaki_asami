@@ -31,13 +31,12 @@ function validate() {
     }
 
     // 郵便番号
-    if (document.edit.postal_code.value === "") {
-        errorElement(document.edit.postal_code, "郵便番号が入力されていません");
-        flag = false;
-    } else if (!/^\d{3}-\d{4}$/.test(document.edit.postal_code.value)) {
+    // 郵便番号の形式チェックだけしたいならこれだけ残す
+    if (document.edit.postal_code.value !== "" && !/^\d{3}-\d{4}$/.test(document.edit.postal_code.value)) {
         errorElement(document.edit.postal_code, "郵便番号の形式が正しくありません（例: 123-4567）");
         flag = false;
     }
+
 
     // 住所（都道府県、市区町村）
     if (document.edit.prefecture.value === "") {
