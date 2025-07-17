@@ -196,6 +196,7 @@ session_destroy();
                     <?php endif ?>
                 </div>
                 <div>
+
                     <label>郵便番号<span>必須</span></label>
                     <div class="postal-row">
                         <input
@@ -203,18 +204,20 @@ session_destroy();
                             type="text"
                             name="postal_code"
                             id="postalCodeField"
-                            placeholder="例）100-0001"
-                            value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>">
+                            placeholder="例）100-0001">
+                        <div id="postalCodeError" class="error-msg"></div>
+                        <?= htmlspecialchars($old['postal_code'] ?? '') ?>
                         <button type="button"
                             class="postal-code-search"
                             id="searchAddressBtn">住所検索</button>
                     </div>
-                    <div id="postalCodeError" class="error-msg2"></div>
+
 
                 </div>
                 <?php if (isset($error_message['postal_code'])) : ?>
-                    <div class="error-msg2">
-                        <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                    <div class=" error-msg2">
+                        <?= htmlspecialchars($error_message['postal_code']) ?>
+                    </div>
                 <?php endif ?>
 
                 <div>

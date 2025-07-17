@@ -434,7 +434,15 @@ textarea+div {
 /* 新規追加 */
 .error-msg2 {
     color: red;
-    margin-left: 166px;
+    vertical-align: unset;
+    display: inline-block;
+    /* 横並びにする */
+    margin-left: 10px;
+    /* テキストの垂直位置を中央に */
+    margin-top: 0px;
+    /* 上の余白を追加 */
+    margin-bottom: 0px;
+    /* 下の余白を追加 */
 }
 
 .birth-selects {
@@ -452,6 +460,19 @@ textarea+div {
 
 .postal-row {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-content: flex-start;
+    /* 左に揃える */
+    gap: 10px;
+    /* 折り返さないように設定 */
+}
+
+.postal-row input {
+    flex: 1;
+    /* 入力フィールドを横幅に合わせて拡大 */
+    margin-right: 10px;
+    /* 入力フィールドとエラーメッセージの間に少しスペースを確保 */
 }
 
 button.postal-code-search {

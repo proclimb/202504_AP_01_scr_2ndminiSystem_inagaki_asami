@@ -32,9 +32,16 @@ function validate() {
 
     // 郵便番号
     // 郵便番号の形式チェックだけしたいならこれだけ残す
-    if (document.edit.postal_code.value !== "" && !/^\d{3}-\d{4}$/.test(document.edit.postal_code.value)) {
-        errorElement(document.edit.postal_code, "郵便番号の形式が正しくありません（例: 123-4567）");
+    // 郵便番号
+    if (document.edit.postal_code.value === "") {
+        errorElement(document.edit.postal_code, "郵便番号が入力されていません");
         flag = false;
+    } else {
+        // 郵便番号の形式チェック
+        if (!/^\d{3}-\d{4}$/.test(document.edit.postal_code.value)) {
+            errorElement(document.edit.postal_code, "郵便番号の形式が正しくありません（例: 123-4567）");
+            flag = false;
+        }
     }
 
 
@@ -100,7 +107,7 @@ var errorElement = function (form, msg) {
     var newElement = document.createElement("div");
 
     // 2-2.error のスタイルを作成する
-    newElement.className = "error";
+    newElement.className = "error-msg2";
 
     // 2-3.エラーメッセージのテキスト要素を作成する
     var newText = document.createTextNode(msg);
@@ -231,14 +238,17 @@ document.addEventListener("DOMContentLoaded", function () {
         postalCodeField.addEventListener("input", function () {
             const val = this.value.trim();
             const pattern = /^\d{3}-\d{4}$/;
+            postalCodeError.textContent = "";
             if (val === "") {
                 postalCodeError.textContent = "郵便番号は必須です";
+                postalCodeError.classList.add("error-msg");
                 this.classList.add("error-form");
             } else if (!pattern.test(val)) {
                 postalCodeError.textContent = "郵便番号の形式が正しくありません（例：123-4567）";
                 this.classList.add("error-form");
             } else {
                 postalCodeError.textContent = "";
+                this.classList.remove("error-form");
                 this.classList.remove("error-form");
             }
         });
