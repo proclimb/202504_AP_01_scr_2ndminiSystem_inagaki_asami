@@ -1,331 +1,182 @@
-/**
- * 各項目の入力を行う
- */
-function validate() {
+/*
+* リアルタイムバリデーションチェック
+* フォームの各フィールドに対してリアルタイムでバリデーションを行い、エラーメッセージを表示します。
+* 各フィールドの入力内容を検証し、問題がある場合はエラーメッセージを表示します。
+* 入力が正しい場合はエラーメッセージをクリアします。
+* ファイルアップロードの際は、ファイルサイズと形式をチェックします。
+* フォーム送信時に全てのフィールドを検証し、問題がある場合は送信を防ぎます。
+*/
 
-    // 1.エラー有無の初期化(true:エラーなし、false：エラーあり)
-    var flag = true;
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form[name="form"]');
+    if (!form) return;
 
-    // 2.エラーメッセージを削除
-    removeElementsByClass("error");
-    removeClass("error-form");
+    const nameInput = form.querySelector('input[name="name"]');
+    const kanaInput = form.querySelector('input[name="kana"]');
+    const postalInput = form.querySelector('input[name="postal_code"]');
+    const prefectureInput = form.querySelector('input[name="prefecture"]');
+    const cityInput = form.querySelector('input[name="city_town"]');
+    const buildingInput = form.querySelector('input[name="building"]');
+    const telInput = form.querySelector('input[name="tel"]');
+    const emailInput = form.querySelector('input[name="email"]');
+    const doc1Input = form.querySelector('input[name="document1"]');
+    const doc2Input = form.querySelector('input[name="document2"]');
 
-    // 3.お名前の入力をチェック
-    // 3-1.必須チェック
-    if (document.edit.name.value == "") {
-        errorElement(document.edit.name, "お名前が入力されていません");
-        flag = false;
-    }
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
-    // 4.ふりがなの入力をチェック
-    // 4-1.必須チェック
-    if (document.edit.kana.value == "") {
-        errorElement(document.edit.kana, "ふりがなが入力されていません");
-        flag = false;
-    } else {
-        // 4-2.ひらがなのチェック
-        if (!validateKana(document.edit.kana.value)) {
-            errorElement(document.edit.kana, "ひらがなを入れて下さい");
-            flag = false;
+    function showError(input, message, className = 'error-msg') {
+        clearError(input, className);
+        input.classList.add('error-form');
+        const div = document.createElement('div');
+        div.className = className;
+        div.textContent = message;
+
+        if (input.name === 'postal_code') {
+            const wrapper = document.getElementById('postalWrapper');
+            wrapper.appendChild(div); // ボタンの後ろに挿入
+        } else {
+            input.parentNode.insertBefore(div, input.nextSibling); // 通常の挿入位置
         }
-    }
-
-    // 郵便番号
-    // 郵便番号の形式チェックだけしたいならこれだけ残す
-    // 郵便番号
-    if (document.edit.postal_code.value === "") {
-        errorElement(document.edit.postal_code, "郵便番号が入力されていません");
-        flag = false;
-    } else {
-        // 郵便番号の形式チェック
-        if (!/^\d{3}-\d{4}$/.test(document.edit.postal_code.value)) {
-            errorElement(document.edit.postal_code, "郵便番号の形式が正しくありません（例: 123-4567）");
-            flag = false;
-        }
-    }
-
-
-    // 住所（都道府県、市区町村）
-    if (document.edit.prefecture.value === "") {
-        errorElement(document.edit.prefecture, "都道府県が入力されていません");
-        flag = false;
-    }
-    if (document.edit.city_town.value === "") {
-        errorElement(document.edit.city_town, "市区町村が入力されていません");
-        flag = false;
-    }
-
-    // 6.電話番号の入力をチェック
-    // 6-1.必須チェック
-    if (document.edit.tel.value == "") {
-        errorElement(document.edit.tel, "電話番号が入力されていません");
-        flag = false;
-    } else {
-        // 6-2.電話番号の長さをチェック
-        if (!validateTel(document.edit.tel.value)) {
-            errorElement(document.edit.tel, "電話番号が違います");
-            flag = false;
-        }
-    }
-
-    // 5.メールアドレスの入力をチェック
-    // 5-1.必須チェック
-    if (document.edit.email.value == "") {
-        errorElement(document.edit.email, "メールアドレスが入力されていません");
-        flag = false;
-    } else {
-        // 5-2.メールアドレスの形式をチェック
-        if (!validateMail(document.edit.email.value)) {
-            errorElement(document.edit.email, "メールアドレスが正しくありません");
-            flag = false;
-        }
-    }
-
-
-
-    // 7.エラーチェック
-    if (flag) {
-        document.edit.submit();
-    }
-
-    return false;
-}
-
-
-/**
- * エラーメッセージを表示する
- * @param {*} form メッセージを表示する項目
- * @param {*} msg 表示するエラーメッセージ
- */
-var errorElement = function (form, msg) {
-
-    // 1.項目タグに error-form のスタイルを適用させる
-    form.className = "error-form";
-
-    // 2.エラーメッセージの追加
-    // 2-1.divタグの作成
-    var newElement = document.createElement("div");
-
-    // 2-2.error のスタイルを作成する
-    newElement.className = "error-msg2";
-
-    // 2-3.エラーメッセージのテキスト要素を作成する
-    var newText = document.createTextNode(msg);
-
-    // 2-4.2-1のdivタグに2-3のテキストを追加する
-    newElement.appendChild(newText);
-
-    // 2-5.項目タグの次の要素として、2-1のdivタグを追加する
-    form.parentNode.insertBefore(newElement, form.nextSibling);
-}
-
-
-/**
- * エラーメッセージの削除
- *   className が、設定されている要素を全件取得し、タグごと削除する
- * @param {*} className 削除するスタイルのクラス名
- */
-var removeElementsByClass = function (className) {
-
-    // 1.html内から className の要素を全て取得する
-    var elements = document.getElementsByClassName(className);
-    while (elements.length > 0) {
-        // 2.取得した全ての要素を削除する
-        elements[0].parentNode.removeChild(elements[0]);
-    }
-}
-
-/**
- * 適応スタイルの削除
- *   className を、要素から削除する
- *
- * @param {*} className
- */
-var removeClass = function (className) {
-
-    // 1.html内から className の要素を全て取得する
-    var elements = document.getElementsByClassName(className);
-    while (elements.length > 0) {
-        // 2.取得した要素からclassName を削除する
-        elements[0].className = "";
-    }
-}
-
-/**
- * メールアドレスの書式チェック
- * @param {*} val チェックする文字列
- * @returns true：メールアドレス、false：メールアドレスではない
- */
-var validateMail = function (val) {
-
-    // メールアドレスの書式が以下であるか(*は、半角英数字と._-)
-    // ***@***.***
-    // ***.***@**.***
-    // ***.***@**.**.***
-    if (val.match(/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/) == null) {
         return false;
-    } else {
+    }
+
+    function clearError(input, className = 'error-msg') {
+        input.classList.remove('error-form');
+
+        if (input.name === 'postal_code') {
+            const wrapper = document.getElementById('postalWrapper');
+            const errors = wrapper.querySelectorAll(`.${className}`);
+            errors.forEach(e => e.remove());
+
+            return true;
+        }
+
+        const parent = input.parentNode;
+        const errors = parent.querySelectorAll(`.${className}`);
+        errors.forEach(err => err.remove());
+
         return true;
     }
-}
 
-/**
- * 電話番号のチェック
- * @param {*} val チェックする文字列
- * @returns true：電話番号、false：電話番号ではない
- */
-var validateTel = function (val) {
-
-    // 半角数値と-(ハイフン)のみであるか
-    if (val.match(/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/) == null) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-/**
-/**
- * ひらがなのチェック（全角・半角スペースを許容）
- * @param {*} val チェックする文字列
- * @returns true：ひらがな＋スペースのみ、false：その他が含まれる
- */
-var validateKana = function (val) {
-    // ひらがな + 全角スペース(\u3000) + 半角スペース(\u0020)
-    const pattern = /^[\u3040-\u309F\u3000\u0020ー]+$/;
-    return pattern.test(val);
-}
-
-
-
-// contact.js
-
-document.addEventListener("DOMContentLoaded", function () {
-    const nameField = document.getElementById("nameField");
-    const nameError = document.getElementById("nameError");
-
-    if (nameField && nameError) {
-        nameField.addEventListener("input", function () {
-            if (this.value.trim() === "") {
-                nameError.textContent = "お名前は必須です";
-                this.classList.add("error-form");
-            } else {
-                nameError.textContent = "";
-                this.classList.remove("error-form");
-            }
-        });
+    // 各フィールドのバリデーション関数
+    // 名前、ふりがな、郵便番号、住所、電話番号、メールアドレス、ファイルアップロードのバリデーションを行います。
+    // 各関数は入力値を検証し、問題がある場合はエラーメッセージを表示します。
+    // 入力が正しい場合はエラーメッセージをクリアします。
+    // それぞれの関数は、入力値を取得し、必要な検証を行います。
+    // エラーメッセージは、入力フィールドの後ろに表示されます。
+    // 入力値が空である場合、または形式が正しくない場合は、エラーメッセージを表示します。
+    // 入力値が正しい場合は、エラーメッセージをクリアします。
+    // これらの関数は、リアルタイムで入力値を検証するために、入力イベントや変更イベントにバインドされます。
+    function validateName() {
+        const val = nameInput.value;
+        clearError(nameInput);
+        const trimmed = val.replace(/[\s\u3000]+/g, '');
+        if (!trimmed) return showError(nameInput, '名前が入力されていません');
+        if (/^[\s\u3000]|[\s\u3000]$/.test(val)) return showError(nameInput, '名前の先頭または末尾にスペースを含めないでください');
+        if (val.length > 20) return showError(nameInput, '名前は20文字以内で入力してください');
+        return clearError(nameInput);
     }
 
-    const kanaField = document.getElementById("kanaField");
-    const kanaError = document.getElementById("kanaError");
-
-    if (kanaField && kanaError) {
-        kanaField.addEventListener("input", function () {
-            if (this.value.trim() === "") {
-                kanaError.textContent = "ふりがなは必須です";
-                this.classList.add("error-form");
-            } else {
-                kanaError.textContent = "";
-                this.classList.remove("error-form");
-            }
-        });
+    function validateKana() {
+        const val = kanaInput.value;
+        clearError(kanaInput);
+        const trimmed = val.replace(/[\s\u3000]+/g, '');
+        if (!trimmed) return showError(kanaInput, 'ふりがなが入力されていません');
+        if (/^[\s\u3000]|[\s\u3000]$/.test(val)) return showError(kanaInput, 'ふりがなの先頭または末尾にスペースを含めないでください');
+        if (val.length > 20) return showError(kanaInput, 'ふりがなは20文字以内で入力してください');
+        if (!/^[ぁ-んー\s\u3000]+$/u.test(val)) return showError(kanaInput, 'ひらがなで入力してください');
+        return clearError(kanaInput);
     }
 
-    // 郵便番号
-    const postalCodeField = document.getElementById("postalCodeField");
-    const postalCodeError = document.getElementById("postalCodeError");
-    if (postalCodeField && postalCodeError) {
-        postalCodeField.addEventListener("input", function () {
-            const val = this.value.trim();
-            const pattern = /^\d{3}-\d{4}$/;
-            postalCodeError.textContent = "";
-            if (val === "") {
-                postalCodeError.textContent = "郵便番号は必須です";
-                postalCodeError.classList.add("error-msg");
-                this.classList.add("error-form");
-            } else if (!pattern.test(val)) {
-                postalCodeError.textContent = "郵便番号の形式が正しくありません（例：123-4567）";
-                postalCodeError.classList.add("error-msg");
-                this.classList.add("error-form");
-            } else {
-                postalCodeError.textContent = "";
-                postalCodeError.classList.remove("error-msg");
-                this.classList.remove("error-form");
-            }
-        });
+    function validatePostal() {
+        const val = postalInput.value;
+        clearError(postalInput, 'error-msg2');
+        if (!val) return showError(postalInput, '郵便番号が入力されていません', 'error-msg2');
+        if (!/^\d{3}-\d{4}$/.test(val)) {
+            return showError(postalInput, '郵便番号は「XXX-XXXX」の形式で入力してください', 'error-msg2');
+        }
+        return clearError(postalInput);
     }
 
-    // 住所（都道府県）
-    const addressField = document.getElementById("address");
-    const addressError = document.getElementById("addressError");
-
-    if (addressField && addressError) {
-        addressField.addEventListener("input", function () {
-            const val = this.value.trim();
-            if (this.value.trim() === "") {
-                addressError.textContent = "都道府県は必須です";
-                this.classList.add("error-form");
-            } else {
-                addressError.textContent = "";
-                this.classList.remove("error-form");
-            }
-        });
+    function validateAddress() {
+        const pre = prefectureInput.value;
+        const city = cityInput.value;
+        const building = buildingInput.value;
+        clearError(prefectureInput);
+        clearError(cityInput);
+        clearError(buildingInput);
+        function markAddressInputs() {
+            prefectureInput.classList.add('error-form');
+            cityInput.classList.add('error-form');
+        }
+        if (!pre || !city) {
+            markAddressInputs();
+            return showError(buildingInput, '住所(都道府県もしくは市区町村・番地)が入力されていません');
+        }
+        if (pre.length > 10) {
+            markAddressInputs();
+            return showError(buildingInput, '都道府県は10文字以内で入力してください');
+        }
+        if (city.length > 50 || building.length > 50) {
+            markAddressInputs();
+            return showError(buildingInput, '市区町村・番地もしくは建物名は50文字以内で入力してください');
+        }
+        return clearError(buildingInput);
     }
 
-    // 住所（市区町村・番地）
-    const address2Field = document.getElementById("address2");
-    const address2Error = document.getElementById("address2Error");
-
-    if (address2Field && address2Error) {
-        address2Field.addEventListener("input", function () {
-            const val = this.value.trim();
-            if (val === "") {
-                address2Error.textContent = "市区町村・番地は必須です";
-                this.classList.add("error-form");
-            } else {
-                address2Error.textContent = "";
-                this.classList.remove("error-form");
-            }
-        });
+    function validateTel() {
+        const val = telInput.value;
+        clearError(telInput);
+        if (!val) return showError(telInput, '電話番号が入力されていません');
+        if (!/^0\d{1,4}-\d{1,4}-\d{3,4}$/.test(val) || val.length < 12 || val.length > 13) {
+            return showError(telInput, '電話番号は12~13桁(例:XXX-XXXX-XXXX)で正しく入力してください');
+        }
+        return clearError(telInput);
     }
 
-    // 電話番号
-    const telField = document.getElementById("tel");
-    const telError = document.getElementById("telError");
-    if (telField && telError) {
-        telField.addEventListener("input", function () {
-            const val = this.value.trim();
-            const pattern = /^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/;
-            if (val === "") {
-                telError.textContent = "電話番号は必須です";
-                this.classList.add("error-form");
-            } else if (!pattern.test(val)) {
-                telError.textContent = "電話番号の形式が正しくありません（例：000-0000-0000）";
-                this.classList.add("error-form");
-            } else {
-                telError.textContent = "";
-                this.classList.remove("error-form");
-            }
-        });
+    function validateEmail() {
+        const val = emailInput.value;
+        clearError(emailInput);
+        if (!val) return showError(emailInput, 'メールアドレスが入力されていません');
+        const re = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        if (!re.test(val)) return showError(emailInput, '有効なメールアドレスを入力してください');
+        return clearError(emailInput);
     }
 
-    // メールアドレス
-    const emailField = document.getElementById("email");
-    const emailError = document.getElementById("emailError");
-    if (emailField && emailError) {
-        emailField.addEventListener("input", function () {
-            const val = this.value.trim();
-            const pattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-            if (val === "") {
-                emailError.textContent = "メールアドレスは必須です";
-                this.classList.add("error-form");
-            } else if (!pattern.test(val)) {
-                emailError.textContent = "メールアドレスの形式が正しくありません";
-                this.classList.add("error-form");
-            } else {
-                emailError.textContent = "";
-                this.classList.remove("error-form");
-            }
-        });
+    function validateDocument(input) {
+        const file = input && input.files ? input.files[0] : null;
+        clearError(input);
+        if (!file) return clearError(input);
+        if (file.size > MAX_FILE_SIZE) return showError(input, '2MB以上はアップロードできません');
+        if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
+            return showError(input, 'ファイル形式は PNG,JPEG,jpg のいずれかのみ許可されています');
+        }
+        return clearError(input);
     }
+
+    // リアルタイムバリデーションの設定
+    if (nameInput) nameInput.addEventListener('input', validateName);
+    if (kanaInput) kanaInput.addEventListener('input', validateKana);
+    if (postalInput) postalInput.addEventListener('input', validatePostal);
+    if (prefectureInput) prefectureInput.addEventListener('input', validateAddress);
+    if (cityInput) cityInput.addEventListener('input', validateAddress);
+    if (buildingInput) buildingInput.addEventListener('input', validateAddress);
+    if (telInput) telInput.addEventListener('input', validateTel);
+    if (emailInput) emailInput.addEventListener('input', validateEmail);
+    if (doc1Input) doc1Input.addEventListener('change', () => validateDocument(doc1Input));
+    if (doc2Input) doc2Input.addEventListener('change', () => validateDocument(doc2Input));
+
+    // フォーム送信時のバリデーションチェック
+    form.addEventListener('submit', (e) => {
+        let valid = true;
+        if (nameInput && !validateName()) valid = false;
+        if (kanaInput && !validateKana()) valid = false;
+        if (postalInput && !validatePostal()) valid = false;
+        if ((prefectureInput || cityInput) && !validateAddress()) valid = false;
+        if (telInput && !validateTel()) valid = false;
+        if (emailInput && !validateEmail()) valid = false;
+        if (doc1Input && !validateDocument(doc1Input)) valid = false;
+        if (doc2Input && !validateDocument(doc2Input)) valid = false;
+        if (!valid) e.preventDefault();
+    });
 });

@@ -411,6 +411,11 @@ input[type=button] {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.28);
 }
 
+/* 新規追加 */
+input[type=file] {
+    padding: 0px 22px;
+}
+
 /* 8623~8625 */
 input+div,
 select+div,
@@ -424,29 +429,17 @@ textarea+div {
 /* 8632 */
 .error-form {
     border-color: #fb9a93 !important;
-    border: 1px solid red;
-    background-color: #ffe6e6;
 }
 
 /* 8636 */
 .error-msg {
     color: red;
-    font-size: 14px;
-    margin-top: 5px;
 }
 
 /* 新規追加 */
 .error-msg2 {
     color: red;
-    vertical-align: unset;
-    display: inline-block;
-    /* 横並びにする */
-    margin-left: 10px;
-    /* テキストの垂直位置を中央に */
-    margin-top: 0px;
-    /* 上の余白を追加 */
-    margin-bottom: 0px;
-    /* 下の余白を追加 */
+    margin-left: 20px;
 }
 
 .birth-selects {
@@ -464,19 +457,7 @@ textarea+div {
 
 .postal-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    justify-content: flex-start;
-    /* 左に揃える */
-    gap: 10px;
-    /* 折り返さないように設定 */
-}
-
-.postal-row input {
-    flex: 1;
-    /* 入力フィールドを横幅に合わせて拡大 */
-    margin-right: 10px;
-    /* 入力フィールドとエラーメッセージの間に少しスペースを確保 */
+    flex-wrap: wrap;
 }
 
 button.postal-code-search {
@@ -715,14 +696,5 @@ input.readonly-field[type="text"] {
 
 /* -------------------------------------------------------------------
 ↑ ここまで変更・追加箇所
-   ------------------------------------------------------------------- */
-/* 「市区町村・番地」のフォームに上マージン追加 */
-#address2 {
-    margin-top: 12px;
-    /* 適宜 8～16px で調整 */
-}
 
-/* 「建物名・部屋番号」のフォームに上マージン追加 */
-#address3 {
-    margin-top: 12px;
-}
+   ------------------------------------------------------------------- */

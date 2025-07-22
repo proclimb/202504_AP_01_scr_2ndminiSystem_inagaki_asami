@@ -15,10 +15,6 @@
  * **   登録画面で入力した情報を画面に表示する
  */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // 1.セッションの開始
 session_cache_limiter('none');
 session_start();
@@ -34,7 +30,7 @@ if (!isset($_SESSION['input_data'])) {
 $_POST = $_SESSION['input_data'];
 
 // 2.セッションを破棄する
-
+session_destroy();
 
 // 3.htmlの描画
 ?>
@@ -56,18 +52,18 @@ $_POST = $_SESSION['input_data'];
     </div>
     <div>
         <form action="submit.php" method="post">
-            <input type="hidden" name="name" value="<?php echo $_POST['name'] ?>">
-            <input type="hidden" name="kana" value="<?php echo $_POST['kana'] ?>">
-            <input type="hidden" name="gender" value="<?php echo $_POST['gender'] ?>">
-            <input type="hidden" name="birth_year" value="<?php echo $_POST['birth_year'] ?>">
-            <input type="hidden" name="birth_month" value="<?php echo $_POST['birth_month'] ?>">
-            <input type="hidden" name="birth_day" value="<?php echo $_POST['birth_day'] ?>">
-            <input type="hidden" name="postal_code" value="<?php echo $_POST['postal_code'] ?>">
-            <input type="hidden" name="prefecture" value="<?php echo $_POST['prefecture'] ?>">
-            <input type="hidden" name="city_town" value="<?php echo $_POST['city_town'] ?>">
-            <input type="hidden" name="building" value="<?php echo $_POST['building'] ?>">
-            <input type="hidden" name="tel" value="<?php echo $_POST['tel'] ?>">
-            <input type="hidden" name="email" value="<?php echo $_POST['email'] ?>">
+            <input type="hidden" name="name" value="<?php echo htmlspecialchars($_POST['name']) ?>">
+            <input type="hidden" name="kana" value="<?php echo htmlspecialchars($_POST['kana']) ?>">
+            <input type="hidden" name="gender" value="<?php echo htmlspecialchars($_POST['gender']) ?>">
+            <input type="hidden" name="birth_year" value="<?php echo htmlspecialchars($_POST['birth_year']) ?>">
+            <input type="hidden" name="birth_month" value="<?php echo htmlspecialchars($_POST['birth_month']) ?>">
+            <input type="hidden" name="birth_day" value="<?php echo htmlspecialchars($_POST['birth_day']) ?>">
+            <input type="hidden" name="postal_code" value="<?php echo htmlspecialchars($_POST['postal_code']) ?>">
+            <input type="hidden" name="prefecture" value="<?php echo htmlspecialchars($_POST['prefecture']) ?>">
+            <input type="hidden" name="city_town" value="<?php echo htmlspecialchars($_POST['city_town']) ?>">
+            <input type="hidden" name="building" value="<?php echo htmlspecialchars($_POST['building']) ?>">
+            <input type="hidden" name="tel" value="<?php echo htmlspecialchars($_POST['tel']) ?>">
+            <input type="hidden" name="email" value="<?php echo htmlspecialchars($_POST['email']) ?>">
             <h1 class="contact-title">登録内容確認入力</h1>
             <p>登録内容をご入力の上、「登録する」ボタンをクリックしてください。</p>
             <div>

@@ -5,36 +5,32 @@
  *
  * ** 登録画面は、TOP、登録、登録確認の3画面から遷移してきます
  * ** 各画面毎の処理は以下です
- * **  1.TOP画面から遷移して来た場合
- * **    1.セッションを開始
- * **    2.値は無いので入力チェックは行わない
- * **    3.セッションの削除
- * **    4.html を描画
- * **      入力項目はからで表示する
+ * ** 1.TOP画面から遷移して来た場合
+ * ** 1.セッションを開始
+ * ** 2.値は無いので入力チェックは行わない
+ * ** 3.セッションの削除
+ * ** 4.html を描画
+ * ** 入力項目はからで表示する
  * **
- * **  2.登録確認画面から遷移して来た場合
- * **    1.セッションを開始
- * **    2.値は無いので入力チェックは行わない
- * **    3.セッションの削除
- * **    4.html を描画
- * **      入力項目は、登録画面で入力した値を表示する
+ * ** 2.登録確認画面から遷移して来た場合
+ * ** 1.セッションを開始
+ * ** 2.値は無いので入力チェックは行わない
+ * ** 3.セッションの削除
+ * ** 4.html を描画
+ * ** 入力項目は、登録画面で入力した値を表示する
  * **
- * **  3.登録画面から遷移してきた場合
- * **    1.セッションを開始
- * **    2.入力チェックをする
- * **      2-1.入力チェックでエラーがなかった場合は、登録確認画面へリダイレクトする
- * **      2-2.入力チェックでエラーが有った場合、次の処理を行う
- * **    3.セッションの削除
- * **    4.html を描画
- * **      入力項目は、登録画面で入力した値を表示する
- * **      エラーメッセージを表示する
+ * ** 3.登録画面から遷移してきた場合
+ * ** 1.セッションを開始
+ * ** 2.入力チェックをする
+ * ** 2-1.入力チェックでエラーがなかった場合は、登録確認画面へリダイレクトする
+ * ** 2-2.入力チェックでエラーが有った場合、次の処理を行う
+ * ** 3.セッションの削除
+ * ** 4.html を描画
+ * ** 入力項目は、登録画面で入力した値を表示する
+ * ** エラーメッセージを表示する
  */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-//  1.DB接続情報、クラス定義の読み込み
+// 1.DB接続情報、クラス定義の読み込み
 require_once 'Validator.php';
 
 // 1.セッションの開始
@@ -50,7 +46,7 @@ $old = $_POST ?? [];
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
 
-    if ($validator->validate($_POST)) {
+    if ($validator->validateData("input", $_POST)) {
         $_SESSION['input_data'] = $_POST;
         header('Location:confirm.php');
         exit();
@@ -59,9 +55,6 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     }
 }
 
-// session_destroy(); はここで呼ばない
-
-
 // 4.セッションを破棄する
 session_destroy();
 
@@ -69,6 +62,8 @@ session_destroy();
 // ** これ以降は、htmlの部分になります
 // ** php の部分は、入力した値を表示する時と入力エラー時のメッセージを表示する時に使用しています
 // ** html 内に、php を記載する場合は、htmlで見やすいように1行で記載する事が多いです
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -78,9 +73,8 @@ session_destroy();
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
-
+    <script src="contact.js"></script>
 </head>
-<script src="contact.js"></script>
 
 <body>
     <div>
@@ -90,7 +84,7 @@ session_destroy();
         <h2>登録画面</h2>
     </div>
     <div>
-        <form action="input.php" method="post" name="edit" onsubmit="return validate();">
+        <form action="input.php" method="post" name="form" enctype="multipart/form-data">
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
@@ -98,11 +92,9 @@ session_destroy();
                     <label>お名前<span>必須</span></label>
                     <input
                         type="text"
-                        id="nameField"
                         name="name"
                         placeholder="例）山田太郎"
-                        value="<?= htmlspecialchars($old['name'] ?? '') ?>">
-                    <div id="nameError" class="error-msg"></div>
+                        value="<?= htmlspecialchars($old['name']) ?>">
                     <?php if (isset($error_message['name'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['name']) ?></div>
@@ -112,11 +104,9 @@ session_destroy();
                     <label>ふりがな<span>必須</span></label>
                     <input
                         type="text"
-                        id="kanaField"
                         name="kana"
                         placeholder="例）やまだたろう"
-                        value="<?= htmlspecialchars($old['kana'] ?? '') ?>">
-                    <div id="kanaError" class="error-msg"></div>
+                        value="<?= htmlspecialchars($old['kana']) ?>">
                     <?php if (isset($error_message['kana'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['kana']) ?></div>
@@ -124,27 +114,27 @@ session_destroy();
                 </div>
                 <div>
                     <label>性別<span>必須</span></label>
-                    <?php $gender = $old['gender'] ?? '1'; ?>
+                    <?php $gender = $old['gender_flag'] ?? '1'; ?>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='1'
-                            <?= ($old['gender'] ?? '1') == '1'
+                            <?= ($old['gender_flag'] ?? '1') == '1'
                                 ? 'checked' : '' ?>>男性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='2'
-                            <?= ($old['gender'] ?? '') == '2'
+                            <?= ($old['gender_flag'] ?? '') == '2'
                                 ? 'checked' : '' ?>>女性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='3'
-                            <?= ($old['gender'] ?? '') == '3'
+                            <?= ($old['gender_flag'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
                 </div>
                 <div>
@@ -196,52 +186,40 @@ session_destroy();
                     <?php endif ?>
                 </div>
                 <div>
-
                     <label>郵便番号<span>必須</span></label>
-                    <div class="postal-row">
+                    <div id="postalWrapper" class="postal-row">
                         <input
                             class="half-width"
                             type="text"
                             name="postal_code"
-                            id="postalCodeField"
+                            id="postal_code"
                             placeholder="例）100-0001"
                             value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>">
-                        <div id="postalCodeError" class="error-msg"></div>
-                        <?= htmlspecialchars($old['postal_code'] ?? '') ?>
                         <button type="button"
                             class="postal-code-search"
                             id="searchAddressBtn">住所検索</button>
                     </div>
-
-
+                    <?php if (isset($error_message['postal_code'])) : ?>
+                        <div class="error-msg2">
+                            <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                    <?php endif ?>
                 </div>
-                <?php if (isset($error_message['postal_code'])) : ?>
-                    <div class=" error-msg2">
-                        <?= htmlspecialchars($error_message['postal_code']) ?>
-                    </div>
-                <?php endif ?>
-
                 <div>
-                    <label for="address">住所<span class="required">必須</span></label>
+                    <label>住所<span>必須</span></label>
                     <input
                         type="text"
-                        id="address"
                         name="prefecture"
+                        id="prefecture"
                         placeholder="都道府県"
                         value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
-                    <div id="addressError" class="error-msg2"></div>
-
                     <input
                         type="text"
-                        id="address2"
                         name="city_town"
+                        id="city_town"
                         placeholder="市区町村・番地"
                         value="<?= htmlspecialchars($old['city_town'] ?? '') ?>">
-                    <div id="address2Error" class="error-msg2"></div>
-
                     <input
                         type="text"
-                        id="address3"
                         name="building"
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($old['building'] ?? '') ?>">
@@ -251,28 +229,24 @@ session_destroy();
                     <?php endif ?>
                 </div>
                 <div>
-                    <label for="tel">電話番号<span class="required">必須</span></label>
+                    <label>電話番号<span>必須</span></label>
                     <input
                         type="text"
-                        id="tel"
                         name="tel"
                         placeholder="例）000-000-0000"
-                        value="<?= htmlspecialchars($old['tel'] ?? '') ?>">
-                    <div id="telError" class="error-msg2"></div>
+                        value="<?= htmlspecialchars($old['tel']) ?>">
                     <?php if (isset($error_message['tel'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['tel']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
-                    <label for="email">メールアドレス<span class="required">必須</span></label>
+                    <label>メールアドレス<span>必須</span></label>
                     <input
-                        type="email"
-                        id="email"
+                        type="text"
                         name="email"
                         placeholder="例）guest@example.com"
-                        value="<?= htmlspecialchars($old['email'] ?? '') ?>">
-                    <div id="emailError" class="error-msg2"></div>
+                        value="<?= htmlspecialchars($old['email']) ?>">
                     <?php if (isset($error_message['email'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['email']) ?></div>
