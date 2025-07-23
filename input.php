@@ -121,21 +121,21 @@ session_destroy();
                     <label class="gender">
                         <input
                             type="radio"
-                            name="gender"
+                            name="gender_flag"
                             value='1'
                             <?= ($old['gender_flag'] ?? '1') == '1'
                                 ? 'checked' : '' ?>>男性</label>
                     <label class="gender">
                         <input
                             type="radio"
-                            name="gender"
+                            name="gender_flag"
                             value='2'
                             <?= ($old['gender_flag'] ?? '') == '2'
                                 ? 'checked' : '' ?>>女性</label>
                     <label class="gender">
                         <input
                             type="radio"
-                            name="gender"
+                            name="gender_flag"
                             value='3'
                             <?= ($old['gender_flag'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
