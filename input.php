@@ -1,5 +1,6 @@
 <?php
-
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 /**
  * 登録画面
  *
@@ -32,6 +33,8 @@
 
 // 1.DB接続情報、クラス定義の読み込み
 require_once 'Validator.php';
+
+use App\Validator;
 
 // 1.セッションの開始
 session_cache_limiter('none');
@@ -94,7 +97,7 @@ session_destroy();
                         type="text"
                         name="name"
                         placeholder="例）山田太郎"
-                        value="<?= htmlspecialchars($old['name']) ?>">
+                        value="<?= htmlspecialchars($old['name'] ?? '') ?>">
                     <?php if (isset($error_message['name'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['name']) ?></div>
@@ -106,7 +109,7 @@ session_destroy();
                         type="text"
                         name="kana"
                         placeholder="例）やまだたろう"
-                        value="<?= htmlspecialchars($old['kana']) ?>">
+                        value="<?= htmlspecialchars($old['kana'] ?? '') ?>">
                     <?php if (isset($error_message['kana'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['kana']) ?></div>
@@ -234,7 +237,7 @@ session_destroy();
                         type="text"
                         name="tel"
                         placeholder="例）000-000-0000"
-                        value="<?= htmlspecialchars($old['tel']) ?>">
+                        value="<?= htmlspecialchars($old['tel'] ?? '') ?>">
                     <?php if (isset($error_message['tel'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['tel']) ?></div>
@@ -246,7 +249,7 @@ session_destroy();
                         type="text"
                         name="email"
                         placeholder="例）guest@example.com"
-                        value="<?= htmlspecialchars($old['email']) ?>">
+                        value="<?= htmlspecialchars($old['email'] ?? '') ?>">
                     <?php if (isset($error_message['email'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['email']) ?></div>
