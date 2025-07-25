@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         <h2>更新・削除画面</h2>
     </div>
     <div>
-        <form action="update.php" method="post" name="form" enctype="multipart/form-data">
+        <form action="edit.php" method="post" name="form" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
             <h1 class="contact-title">更新内容入力</h1>
             <p>更新内容をご入力の上、「更新」ボタンをクリックしてください。</p>

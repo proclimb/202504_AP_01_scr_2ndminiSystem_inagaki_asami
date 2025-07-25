@@ -13,7 +13,7 @@ use App\Validator;
 // Validatorクラスをインスタンス化
 
 
-
+$pdo = Db::getPdoInstance();
 
 /**
  * 更新完了画面
@@ -56,11 +56,18 @@ $validator = new Validator(); // クラス利用
 
 $validator = new Validator(); // クラス利用
 
-if (!empty($input['birth_year']) && !empty($input['birth_month']) && !empty($input['birth_day'])) {
-    $birth_display = htmlspecialchars($input['birth_year'] . '年' . $input['birth_month'] . '月' . $input['birth_day'] . '日');
+if (!empty($input['birth_date'])) {
+    // "1990-07-25" の形式から年・月・日を取り出す
+    $birthParts = explode('-', $input['birth_date']);
+    $birth_year = $birthParts[0] ?? '';
+    $birth_month = $birthParts[1] ?? '';
+    $birth_day = $birthParts[2] ?? '';
+
+    $birth_display = htmlspecialchars("{$birth_year}年{$birth_month}月{$birth_day}日");
 } else {
     $birth_display = '未入力';
 }
+
 
 if (!$validator->validateData('edit', $input)) {
     echo '<h2>バリデーションエラー内容：</h2>';
@@ -79,7 +86,8 @@ $userData = [
     'gender_flag'  => $input['gender_flag'],
     'tel'          => $input['tel'],
     'email'        => $input['email'],
-    'birth_date'   => $input['birth_year'] . '-' . $input['birth_month'] . '-' . $input['birth_day']
+    'birth_date' => $input['birth_date'] ?? null
+
 ];
 
 
