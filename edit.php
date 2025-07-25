@@ -36,44 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     if ($isValidData && $isValidFiles) {
         // バリデーションチェックに成功した場合
         // アップロードファイルをサーバーに一時保存
-        $uploadDir = __DIR__ . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        $documentData = [];
-
-        foreach (['document1', 'document2'] as $key) {
-            if (isset($_FILES[$key]) && is_uploaded_file($_FILES[$key]['tmp_name'])) {
-                $filename = uniqid() . '_' . basename($_FILES[$key]['name']);
-                $target = $uploadDir . $filename;
-
-                if (move_uploaded_file($_FILES[$key]['tmp_name'], $target)) {
-                    $documentData[$key] = [
-                        'path' => $target,
-                        'type' => $_FILES[$key]['type'],
-                        'name' => $_FILES[$key]['name'],
-                    ];
-                }
-            }
-        }
-
-        // セッションに入力データを保存
-        $_SESSION['document_data'] = $documentData;
         $_SESSION['edit_data'] = $_POST;
+        $_SESSION['document_data'] = $_FILES;
 
-        // 画面遷移
-        session_write_close();
-        header('Location:update.php');
+        header('Location: update.php');
         exit;
     } else {
+        // エラー時
         $error_message = $validator->getErrors();
         $error_message_files = $validator->getErrorsFiles();
     }
 }
 
-unset($_FILES);
-session_destroy();
+
+
 // 4.html の描画
 ?>
 <!DOCTYPE html>
@@ -95,7 +71,7 @@ session_destroy();
         <h2>更新・削除画面</h2>
     </div>
     <div>
-        <form action="edit.php" method="post" name="form" enctype="multipart/form-data">
+        <form action="update.php" method="post" name="form" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
             <h1 class="contact-title">更新内容入力</h1>
             <p>更新内容をご入力の上、「更新」ボタンをクリックしてください。</p>

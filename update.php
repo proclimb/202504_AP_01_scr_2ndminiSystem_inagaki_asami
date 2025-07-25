@@ -42,22 +42,15 @@ session_start();
 
 
 // Dbクラスが正しく読み込まれているか確認
-if (!class_exists('Db')) {
-    die('Db class not found. Please check that Db.php exists and defines the Db class.');
+if (!isset($_SESSION['edit_data'])) {
+    echo "セッションが切れました。再度やり直してください。";
+    exit;
 }
 
-// DbクラスからPDOインスタンスを取得
-$pdo = Db::getPdoInstance();
+$input = $_SESSION['edit_data'];
+$_FILES = $_SESSION['document_data'];
 
-$input = $_POST;
 
-$input = $_POST;
-
-// ↓ここに追加
-echo '<pre>';
-var_dump($_POST);
-echo '</pre>';
-exit;
 
 $validator = new Validator(); // クラス利用
 
@@ -79,24 +72,24 @@ if (!$validator->validateData('edit', $input)) {
 
 // 2. 入力データ取得
 // 2-1. ユーザーデータ取得
-$id = $_POST['id'];
+$id = $input['id'];
 $userData = [
-    'name'         => $_POST['name'],
-    'kana'         => $_POST['kana'],
-    'gender_flag'  => $_POST['gender_flag'],
-    'tel'          => $_POST['tel'],
-    'email'        => $_POST['email'],
-    'birth_date'   => $_POST['birth_year'] . '-' . $_POST['birth_month'] . '-' . $_POST['birth_day']
+    'name'         => $input['name'],
+    'kana'         => $input['kana'],
+    'gender_flag'  => $input['gender_flag'],
+    'tel'          => $input['tel'],
+    'email'        => $input['email'],
+    'birth_date'   => $input['birth_year'] . '-' . $input['birth_month'] . '-' . $input['birth_day']
 ];
 
 
 // 2-2. 住所データも取得
 $addressData = [
     'user_id'      => $id,
-    'postal_code'  => $_POST['postal_code'],
-    'prefecture'   => $_POST['prefecture'],
-    'city_town'    => $_POST['city_town'],
-    'building'     => $_POST['building'],
+    'postal_code'  => $input['postal_code'],
+    'prefecture'   => $input['prefecture'],
+    'city_town'    => $input['city_town'],
+    'building'     => $input['building'],
 ];
 
 // 3. トランザクション開始
