@@ -161,19 +161,27 @@ session_destroy();
                     <div>
                         <label>生年月日<span>必須</span></label>
                         <?php
-                        $birthDateStr = $_POST['birth_date'] ?? '';
+                        $birthDateRaw = $_POST['birth_date'] ?? '';
                         $birthDateFormatted = '';
-                        if ($birthDateStr && $birthDateStr !== '0000-00-00' && strtotime($birthDateStr) !== false) {
-                            $birthDateFormatted = date('Y年n月j日', strtotime($birthDateStr));
+                        if (!empty($birthDateRaw) && $birthDateRaw !== '0000-00-00' && strtotime($birthDateRaw)) {
+                            $birthDateFormatted = date('Y年n月j日', strtotime($birthDateRaw));
                         }
                         ?>
+                        <!-- 表示用（編集不可） -->
                         <input
                             type="text"
-                            name="birth_date"
                             value="<?= htmlspecialchars($birthDateFormatted) ?>"
                             readonly
                             class="readonly-field">
+
+                        <!-- サーバー送信用（非表示） -->
+                        <input
+                            type="hidden"
+                            name="birth_date"
+                            value="<?= htmlspecialchars($birthDateRaw) ?>">
                     </div>
+
+
                     <div>
                         <label>郵便番号<span>必須</span></label>
                         <div id="postalWrapper" class="postal-row">
