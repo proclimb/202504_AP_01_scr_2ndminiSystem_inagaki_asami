@@ -87,11 +87,20 @@ class Validator
         } elseif (mb_strlen($data['city_town']) > 50 || mb_strlen($data['building']) > 50) {
             $this->error_message['address'] = '市区町村・番地もしくは建物名は50文字以内で入力してください';
         }
-        if (preg_match('/[１-９]{1}[丁目番地号、\-0-9a-zA-Zａ-ｚＡ-Ｚ]+/', $data['city_town'])) {
 
-            // 市区町村は入っているが、「番地などの詳細」が見当たらないケース
+        // 住所の整合性チェック（郵便番号と都道府県・市区町村の一致）
+        if (!isset($this->error_message['postal_code']) && !isset($this->error_message['address'])) {
+            if (!$this->checkPostalCodeAndAddressMatch($data['postal_code'], $data['prefecture'], $data['city_town'])) {
+                $this->error_message['address'] = '郵便番号と住所が一致しません。正しい住所を入力してください。';
+            }
+        }
+
+        // 市区町村以下の詳細（番地など）があるか
+        if (!isset($this->error_message['address']) && !preg_match('/[１-９]{1}[丁目番地号、\-0-9a-zA-Zａ-ｚＡ-Ｚ]+/', $data['city_town'])) {
             $this->error_message['address'] = '市区町村以下の住所が入力されていません';
         }
+
+
 
         // 電話番号
         if (empty($data['tel'])) {
@@ -113,6 +122,37 @@ class Validator
 
         return empty($this->error_message);
     }
+
+    private function checkPostalCodeAndAddressMatch(string $postalCode, string $prefecture, string $cityTown): bool
+    {
+        $apiUrl = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=" . str_replace('-', '', $postalCode);
+
+        $response = @file_get_contents($apiUrl);
+        if ($response === false) {
+            return false;
+        }
+
+        $data = json_decode($response, true);
+        if (!empty($data['results'])) {
+            $result = $data['results'][0];
+
+            $apiPrefecture = trim($result['address1']); // 都道府県
+            $apiCityTown = trim($result['address2'] . $result['address3']); // 市区町村＋町名
+
+            error_log("API: {$apiPrefecture} {$apiCityTown}");
+            error_log("Input: {$prefecture} {$cityTown}");
+
+            // 引数（ユーザー入力）の整形
+            $inputPrefecture = trim($prefecture);
+            $inputCityTown = trim($cityTown);
+
+            // 完全一致でチェック
+            return $apiPrefecture === $inputPrefecture && $apiCityTown === $inputCityTown;
+        }
+
+        return false;
+    }
+
 
     public function validateFiles(array $files): bool
     {
