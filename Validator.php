@@ -86,9 +86,11 @@ class Validator
             $this->error_message['address'] = '都道府県は10文字以内で入力してください';
         } elseif (mb_strlen($data['city_town']) > 50 || mb_strlen($data['building']) > 50) {
             $this->error_message['address'] = '市区町村・番地もしくは建物名は50文字以内で入力してください';
-        } else {
-            // DBで郵便番号と住所の整合性チェック
+        }
+        if (preg_match('/[１-９]{1}[丁目番地号、\-0-9a-zA-Zａ-ｚＡ-Ｚ]+/', $data['city_town'])) {
 
+            // 市区町村は入っているが、「番地などの詳細」が見当たらないケース
+            $this->error_message['address'] = '市区町村以下の住所が入力されていません';
         }
 
         // 電話番号

@@ -116,6 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
             markAddressInputs();
             return showError(buildingInput, '住所(都道府県もしくは市区町村・番地)が入力されていません');
         }
+
+        if (!/\d|丁目|番|号/.test(city)) {
+            markAddressInputs();
+            return showError(buildingInput, '市区町村以下の住所が入力されていません');
+        }
+
         if (pre.length > 10) {
             markAddressInputs();
             return showError(buildingInput, '都道府県は10文字以内で入力してください');
