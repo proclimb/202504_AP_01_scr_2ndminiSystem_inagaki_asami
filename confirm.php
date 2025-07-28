@@ -30,7 +30,6 @@ if (!isset($_SESSION['input_data'])) {
 $_POST = $_SESSION['input_data'];
 
 // 2.セッションを破棄する
-session_destroy();
 
 // 3.htmlの描画
 ?>
@@ -54,7 +53,7 @@ session_destroy();
         <form action="submit.php" method="post">
             <input type="hidden" name="name" value="<?php echo htmlspecialchars($_POST['name']) ?>">
             <input type="hidden" name="kana" value="<?php echo htmlspecialchars($_POST['kana']) ?>">
-            <input type="hidden" name="gender" value="<?php echo htmlspecialchars($_POST['gender']) ?>">
+            <input type="hidden" name="gender_flag" value="<?php echo htmlspecialchars($_POST['gender_flag']) ?>">
             <input type="hidden" name="birth_year" value="<?php echo htmlspecialchars($_POST['birth_year']) ?>">
             <input type="hidden" name="birth_month" value="<?php echo htmlspecialchars($_POST['birth_month']) ?>">
             <input type="hidden" name="birth_day" value="<?php echo htmlspecialchars($_POST['birth_day']) ?>">
@@ -77,11 +76,11 @@ session_destroy();
                 </div>
                 <div>
                     <label>性別</label>
-                    <p><?php if ($_POST['gender'] == '1') {
+                    <p><?php if ($_POST['gender_flag'] == '1') {
                             echo "男性";
-                        } elseif ($_POST['gender'] == '2') {
+                        } elseif ($_POST['gender_flag'] == '2') {
                             echo "女性";
-                        } elseif ($_POST['gender'] == '3') {
+                        } elseif ($_POST['gender_flag'] == '3') {
                             echo "その他";
                         } ?></p>
                 </div>

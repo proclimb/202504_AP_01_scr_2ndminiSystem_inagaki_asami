@@ -29,8 +29,10 @@ class Validator
             $this->error_message['name'] = '名前の先頭または末尾にスペースを含めないでください';
         } elseif (mb_strlen($data['name']) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
-        } else {
+        } elseif (!preg_match('/^[ぁ-んァ-ン一-龯ー\s　]+$/u', $data['name'])) {
+            $this->error_message['name'] = '名前は日本語（漢字・ひらがな・カタカナ）のみで入力してください';
         }
+
 
         // ふりがな
         $kana = trim($data['kana'] ?? '');
@@ -49,15 +51,26 @@ class Validator
         if ($form !== "edit") {
             if (empty($data['birth_year']) || empty($data['birth_month']) || empty($data['birth_day'])) {
                 $this->error_message['birth_date'] = '生年月日が入力されていません';
-            } elseif (!$this->isValidDate($data['birth_year'], $data['birth_month'], $data['birth_day'])) {
-                $this->error_message['birth_date'] = '生年月日が正しくありません';
             } else {
-                $birthDate = sprintf('%04d-%02d-%02d', $data['birth_year'], $data['birth_month'], $data['birth_day']);
-                if ($birthDate > date('Y-m-d')) {
-                    $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
+                $year = (int)$data['birth_year'];
+                $month = (int)$data['birth_month'];
+                $day = (int)$data['birth_day'];
+
+                // 年の範囲チェック（例：1900年～現在の年）
+                $currentYear = (int)date('Y');
+                if ($year < 1900 || $year > $currentYear) {
+                    $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年〜' . $currentYear . 'の間で入力してください）';
+                } elseif (!checkdate($month, $day, $year)) {
+                    $this->error_message['birth_date'] = '生年月日が正しくありません';
+                } else {
+                    $birthDate = sprintf('%04d-%02d-%02d', $year, $month, $day);
+                    if ($birthDate > date('Y-m-d')) {
+                        $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
+                    }
                 }
             }
         }
+
 
         // 郵便番号
         if (empty($data['postal_code'])) {

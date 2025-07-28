@@ -32,7 +32,7 @@ $pdo = Db::getPdoInstance();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $kana = $_POST['kana'];
-    $gender = $_POST['gender'];
+    $gender = $_POST['gender_flag'];
     $y = $_POST['birth_year'];
     $m = $_POST['birth_month'];
     $d = $_POST['birth_day'];
@@ -53,7 +53,7 @@ $user = new User($pdo);
 $userId = $user->create([
     'name' => $_POST['name'],
     'kana' => $_POST['kana'],
-    'gender_flag' => $_POST['gender'],
+    'gender_flag' => $_POST['gender_flag'],
     'birth_date' => $birth_date,
     'tel' => $_POST['tel'],
     'email' => $_POST['email']
@@ -69,6 +69,13 @@ $address->create([
     'city_town' => $_POST['city_town'],
     'building' => $_POST['building']
 ]);
+
+
+// ↓ データベースへの登録処理などがすべて終わった後
+
+// セッション破棄（使い終わったセッションを消す）
+session_start(); // セッション再開が必要
+session_destroy();
 
 // 4.html の描画
 ?>

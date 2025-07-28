@@ -74,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!trimmed) return showError(nameInput, '名前が入力されていません');
         if (/^[\s\u3000]|[\s\u3000]$/.test(val)) return showError(nameInput, '名前の先頭または末尾にスペースを含めないでください');
         if (val.length > 20) return showError(nameInput, '名前は20文字以内で入力してください');
+        if (!/^[ぁ-んァ-ン一-龯ー\s]+$/u.test(val)) {
+            return showError(nameInput, '名前は日本語で入力してください');
+        }
         return clearError(nameInput);
     }
 
