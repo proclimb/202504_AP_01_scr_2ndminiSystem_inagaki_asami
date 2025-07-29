@@ -49,24 +49,28 @@ class Validator
 
         // 生年月日
         if ($form !== "edit") {
-            if (empty($data['birth_year']) || empty($data['birth_month']) || empty($data['birth_day'])) {
+            if (
+                !isset($data['birth_year']) || $data['birth_year'] === '' ||
+                !isset($data['birth_month']) || $data['birth_month'] === '' ||
+                !isset($data['birth_day']) || $data['birth_day'] === ''
+            ) {
                 $this->error_message['birth_date'] = '生年月日が入力されていません';
-            } else {
-                $year = (int)$data['birth_year'];
-                $month = (int)$data['birth_month'];
-                $day = (int)$data['birth_day'];
+            }
+        } else {
+            $year = (int)$data['birth_year'];
+            $month = (int)$data['birth_month'];
+            $day = (int)$data['birth_day'];
 
-                // 年の範囲チェック（例：1900年～現在の年）
-                $currentYear = (int)date('Y');
-                if ($year < 1900 || $year > $currentYear) {
-                    $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年〜' . $currentYear . 'の間で入力してください）';
-                } elseif (!checkdate($month, $day, $year)) {
-                    $this->error_message['birth_date'] = '生年月日が正しくありません';
-                } else {
-                    $birthDate = sprintf('%04d-%02d-%02d', $year, $month, $day);
-                    if ($birthDate > date('Y-m-d')) {
-                        $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
-                    }
+            // 年の範囲チェック（例：1900年～現在の年）
+            $currentYear = (int)date('Y');
+            if ($year < 1900 || $year > $currentYear) {
+                $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年〜' . $currentYear . 'の間で入力してください）';
+            } elseif (!checkdate($month, $day, $year)) {
+                $this->error_message['birth_date'] = '生年月日が正しくありません';
+            } else {
+                $birthDate = sprintf('%04d-%02d-%02d', $year, $month, $day);
+                if ($birthDate > date('Y-m-d')) {
+                    $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
                 }
             }
         }
@@ -95,6 +99,28 @@ class Validator
             }
         }
 
+        // 市区町村に前後スペースがあるかチェック（半角・全角）
+        if (
+            !isset($this->error_message['address']) &&
+            (preg_match('/^[\s　]|[\s　]$/u', $data['city_town']))
+        ) {
+            $this->error_message['address'] = '市区町村・番地の先頭または末尾にスペースを含めないでください';
+        }
+
+        // 都道府県の前後スペース
+        if (
+            !isset($this->error_message['address']) &&
+            (preg_match('/^[\s　]|[\s　]$/u', $data['prefecture']))
+        ) {
+            $this->error_message['address'] = '都道府県の先頭または末尾にスペースを含めないでください';
+        }
+
+        // 建物名の前後スペース（任意入力なら空チェック除く）
+        if (!empty($data['building']) && preg_match('/^[\s　]|[\s　]$/u', $data['building'])) {
+            $this->error_message['address'] = '建物名の先頭または末尾にスペースを含めないでください';
+        }
+
+
         // 市区町村以下の詳細（番地など）があるか
         if (!isset($this->error_message['address']) && !preg_match('/[１-９]{1}[丁目番地号、\-0-9a-zA-Zａ-ｚＡ-Ｚ]+/', $data['city_town'])) {
             $this->error_message['address'] = '市区町村以下の住所が入力されていません';
@@ -119,6 +145,9 @@ class Validator
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
         }
+
+        error_log('バリデーションエラー: ' . print_r($this->error_message, true));
+
 
         return empty($this->error_message);
     }

@@ -1,4 +1,7 @@
 <?php
+
+
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 /**
@@ -36,6 +39,8 @@ require_once 'Validator.php';
 
 use App\Validator;
 
+$validator = new Validator();
+
 // 1.セッションの開始
 session_cache_limiter('none');
 session_start();
@@ -43,23 +48,31 @@ session_start();
 // 2.変数の初期化
 // *$_POSTの値があるときは初期化しない
 $error_message = [];
-$old = $_POST ?? [];
+$old = [];
 
-// 3.入力項目の入力チェック
-if (!empty($_POST) && empty($_SESSION['input_data'])) {
-    $validator = new Validator();
+if (!empty($_SESSION['input_data'])) {
+    // 確認画面などから戻ってきた場合、セッションのデータをセット
+    $old = $_SESSION['input_data'];
+} elseif (!empty($_POST)) {
+    // POSTデータがある場合はそれをセット
+    $old = $_POST;
 
+    // 入力チェックはここで行う
     if ($validator->validateData("input", $_POST)) {
         $_SESSION['input_data'] = $_POST;
-        header('Location:confirm.php');
+        header('Location: confirm.php');
         exit();
     } else {
         $error_message = $validator->getErrors();
     }
 }
 
+
+
+
 // 4.セッションを破棄する
-session_destroy();
+
+// session_destroy(); // ← ここはコメントアウトか削除でOK
 
 // 5.html の描画
 // ** これ以降は、htmlの部分になります
@@ -185,7 +198,10 @@ session_destroy();
                     </div>
                     <?php if (isset($error_message['birth_date'])) : ?>
                         <div class="error-msg2">
-                            <?= htmlspecialchars($error_message['birth_date']) ?></div>
+                            <pre style="color: red;"><?php print_r($error_message); ?></pre>
+
+                            <?= htmlspecialchars($error_message['birth_date']) ?>
+                        </div>
                     <?php endif ?>
                 </div>
                 <div>

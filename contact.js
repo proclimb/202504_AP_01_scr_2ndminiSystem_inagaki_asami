@@ -8,6 +8,12 @@
 */
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    function hasLeadingOrTrailingSpace(str) {
+        return /^[\s\u3000]|[\s\u3000]$/.test(str);
+    }
+
+
     const form = document.querySelector('form[name="form"]');
     if (!form) return;
 
@@ -112,6 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
             prefectureInput.classList.add('error-form');
             cityInput.classList.add('error-form');
         }
+
+        if (/^[\s\u3000]|[\s\u3000]$/.test(pre) || /^[\s\u3000]|[\s\u3000]$/.test(city) || /^[\s\u3000]|[\s\u3000]$/.test(building)) {
+            markAddressInputs();
+            return showError(buildingInput, '住所欄の先頭または末尾にスペースを含めないでください');
+        }
+
+
         if (!pre || !city) {
             markAddressInputs();
             return showError(buildingInput, '住所(都道府県もしくは市区町村・番地)が入力されていません');
