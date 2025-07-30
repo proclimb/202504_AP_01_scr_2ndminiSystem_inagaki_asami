@@ -138,6 +138,7 @@ class Validator
 
 
         // 電話番号
+        $tel = $data['tel'] ?? '';
         if (empty($data['tel'])) {
             $this->error_message['tel'] = '電話番号が入力されていません';
         } elseif (
@@ -146,6 +147,8 @@ class Validator
             mb_strlen($data['tel']) > 13
         ) {
             $this->error_message['tel'] = '電話番号は12~13桁(例:XXX-XXXX-XXXX)で正しく入力してください';
+        } elseif (preg_match('/^[\s　]|[\s　]$/u', $tel)) {
+            $this->error_message['tel'] = '先頭または末尾にスペースを含めないでください';
         }
 
         // メールアドレス

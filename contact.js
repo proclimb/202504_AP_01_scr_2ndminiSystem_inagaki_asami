@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return showError(postalInput, '先頭または末尾にスペースを含めないでください', 'error-msg2');
         }
         if (!val.includes('-')) {
-            return showError(postalInput, '「- (ハイフン)」を記入してください　　例)「XXX-XXXX」', 'error-msg2');
+            return showError(postalInput, '「- (ハイフン)」を記入してください　　(例：XXX-XXXX)', 'error-msg2');
         }
 
         // 形式チェック
@@ -161,13 +161,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function validateTel() {
         const val = telInput.value;
-        clearError(telInput);
-        if (!val) return showError(telInput, '電話番号が入力されていません');
-        if (!/^0\d{1,4}-\d{1,4}-\d{3,4}$/.test(val) || val.length < 12 || val.length > 13) {
-            return showError(telInput, '電話番号は12~13桁(例:XXX-XXXX-XXXX)で正しく入力してください');
+        clearError(telInput, 'error-msg4');
+
+        if (!val) return showError(telInput, '電話番号が入力されていません', 'error-msg4');
+
+        // スペースの前後チェック
+        if (/^[\s\u3000]|[\s\u3000]$/u.test(val)) {
+            return showError(telInput, '先頭または末尾にスペースを含めないでください', 'error-msg4');
         }
+
+        // ハイフン形式チェック（例：000-0000-0000）
+        if (!/^\d{2,4}-\d{2,4}-\d{3,4}$/.test(val)) {
+            return showError(telInput, '電話番号は12~13桁（例：XXX-XXXX-XXXX）で正しく入力してください', 'error-msg4');
+        }
+
         return clearError(telInput);
     }
+
 
     function validateEmail() {
         const val = emailInput.value;
