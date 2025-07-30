@@ -197,12 +197,11 @@ if (!empty($_SESSION['input_data'])) {
                         </select>
                     </div>
                     <?php if (isset($error_message['birth_date'])) : ?>
-                        <div class="error-msg2">
-                            <pre style="color: red;"><?php print_r($error_message); ?></pre>
+                        <div class="birth-error"><?= htmlspecialchars($error_message['birth_date']) ?></div>
+                    <?php endif; ?>
 
-                            <?= htmlspecialchars($error_message['birth_date']) ?>
-                        </div>
-                    <?php endif ?>
+
+
                 </div>
                 <div>
                     <label>郵便番号<span>必須</span></label>

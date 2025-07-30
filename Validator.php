@@ -48,20 +48,14 @@ class Validator
         }
 
         // 生年月日
-        if ($form !== "edit") {
-            if (
-                !isset($data['birth_year']) || $data['birth_year'] === '' ||
-                !isset($data['birth_month']) || $data['birth_month'] === '' ||
-                !isset($data['birth_day']) || $data['birth_day'] === ''
-            ) {
-                $this->error_message['birth_date'] = '生年月日が入力されていません';
-            }
-        } else {
-            $year = (int)$data['birth_year'];
-            $month = (int)$data['birth_month'];
-            $day = (int)$data['birth_day'];
+        // 生年月日
+        $year = (int)($data['birth_year'] ?? 0);
+        $month = (int)($data['birth_month'] ?? 0);
+        $day = (int)($data['birth_day'] ?? 0);
 
-            // 年の範囲チェック（例：1900年～現在の年）
+        if ($year === 0 || $month === 0 || $day === 0) {
+            $this->error_message['birth_date'] = '生年月日が入力されていません';
+        } else {
             $currentYear = (int)date('Y');
             if ($year < 1900 || $year > $currentYear) {
                 $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年〜' . $currentYear . 'の間で入力してください）';
@@ -76,6 +70,7 @@ class Validator
         }
 
 
+
         // 郵便番号
         $postal = $data['postal_code'] ?? '';
 
@@ -85,7 +80,7 @@ class Validator
             $this->error_message['postal_code'] = '先頭または末尾にスペースを含めないでください';
         } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $postal)) {
             $this->error_message['postal_code'] = '郵便番号は「XXX-XXXX」の形式で入力してください';
-        } elseif (!str_contains($postal, '-')) {
+        } elseif (strpos($postal, '-') === false) {
             $this->error_message['postal_code'] = '郵便番号に「-（ハイフン）」を記入してください';
         } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $postal)) {
             $this->error_message['postal_code'] = '郵便番号は「XXX-XXXX」の形式で入力してください';
