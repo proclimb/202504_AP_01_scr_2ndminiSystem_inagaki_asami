@@ -90,6 +90,31 @@ if (!empty($_SESSION['input_data'])) {
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
     <script src="contact.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.forms['form'];
+            form.addEventListener('submit', function(e) {
+                const year = form.birth_year.value;
+                const month = form.birth_month.value;
+                const day = form.birth_day.value;
+
+                if (!year || !month || !day) {
+                    // 未選択は別のチェックに任せる
+                    return;
+                }
+
+                const birthDate = new Date(year, month - 1, day);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (birthDate > today) {
+                    e.preventDefault(); // 送信停止
+                    alert('生年月日に未来の日付は選択できません。');
+                    form.birth_year.focus();
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>

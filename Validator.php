@@ -53,21 +53,26 @@ class Validator
         $month = (int)($data['birth_month'] ?? 0);
         $day = (int)($data['birth_day'] ?? 0);
 
+
+
         if ($year === 0 || $month === 0 || $day === 0) {
             $this->error_message['birth_date'] = '生年月日が入力されていません';
         } else {
             $currentYear = (int)date('Y');
             if ($year < 1900 || $year > $currentYear) {
-                $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年〜' . $currentYear . 'の間で入力してください）';
+                $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年～' . $currentYear . 'の間で入力してください）';
             } elseif (!checkdate($month, $day, $year)) {
                 $this->error_message['birth_date'] = '生年月日が正しくありません';
             } else {
-                $birthDate = sprintf('%04d-%02d-%02d', $year, $month, $day);
-                if ($birthDate > date('Y-m-d')) {
+                $birthDate = \DateTime::createFromFormat('Y-m-d', sprintf('%04d-%02d-%02d', $year, $month, $day));
+                $today = new \DateTime('today');
+
+                if ($birthDate > $today) {
                     $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
                 }
             }
         }
+
 
 
 
