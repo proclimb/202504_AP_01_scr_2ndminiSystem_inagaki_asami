@@ -100,12 +100,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function validatePostal() {
         const val = postalInput.value;
         clearError(postalInput, 'error-msg2');
+
         if (!val) return showError(postalInput, '郵便番号が入力されていません', 'error-msg2');
+
+        // 前後にスペースがあるか
+        if (/^[\s\u3000]|[\s\u3000]$/u.test(val)) {
+            return showError(postalInput, '先頭または末尾にスペースを含めないでください', 'error-msg2');
+        }
+        if (!val.includes('-')) {
+            return showError(postalInput, '「- (ハイフン)」を記入してください　　例)「XXX-XXXX」', 'error-msg2');
+        }
+
+        // 形式チェック
         if (!/^\d{3}-\d{4}$/.test(val)) {
             return showError(postalInput, '郵便番号は「XXX-XXXX」の形式で入力してください', 'error-msg2');
         }
+
         return clearError(postalInput);
     }
+
 
     function validateAddress() {
         const pre = prefectureInput.value;
@@ -180,6 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nameInput) nameInput.addEventListener('input', validateName);
     if (kanaInput) kanaInput.addEventListener('input', validateKana);
     if (postalInput) postalInput.addEventListener('input', validatePostal);
+    postalInput.addEventListener('blur', () => {
+        postalInput.value = postalInput.value.trim(); // スペース削除
+        validatePostal(); // 再バリデーション
+    });
+
     if (prefectureInput) prefectureInput.addEventListener('input', validateAddress);
     if (cityInput) cityInput.addEventListener('input', validateAddress);
     if (buildingInput) buildingInput.addEventListener('input', validateAddress);

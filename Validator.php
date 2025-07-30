@@ -77,11 +77,20 @@ class Validator
 
 
         // 郵便番号
-        if (empty($data['postal_code'])) {
+        $postal = $data['postal_code'] ?? '';
+
+        if (empty($postal)) {
             $this->error_message['postal_code'] = '郵便番号が入力されていません';
-        } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $data['postal_code'])) {
+        } elseif (preg_match('/^[\s　]|[\s　]$/u', $postal)) {
+            $this->error_message['postal_code'] = '先頭または末尾にスペースを含めないでください';
+        } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $postal)) {
+            $this->error_message['postal_code'] = '郵便番号は「XXX-XXXX」の形式で入力してください';
+        } elseif (!str_contains($postal, '-')) {
+            $this->error_message['postal_code'] = '郵便番号に「-（ハイフン）」を記入してください';
+        } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $postal)) {
             $this->error_message['postal_code'] = '郵便番号は「XXX-XXXX」の形式で入力してください';
         }
+
 
         // 住所
         if (empty($data['prefecture']) || empty($data['city_town'])) {
