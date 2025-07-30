@@ -182,11 +182,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function validateEmail() {
         const val = emailInput.value;
         clearError(emailInput);
-        if (!val) return showError(emailInput, 'メールアドレスが入力されていません');
+
+        if (!val) {
+            return showError(emailInput, 'メールアドレスが入力されていません');
+        }
+
+        if (/^[\s\u3000]|[\s\u3000]$/u.test(val)) {
+            return showError(emailInput, '先頭または末尾にスペースを含めないでください');
+        }
+
         const re = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-        if (!re.test(val)) return showError(emailInput, '有効なメールアドレスを入力してください');
+        if (!re.test(val)) {
+            return showError(emailInput, '有効なメールアドレスを入力してください');
+        }
+
         return clearError(emailInput);
     }
+
 
     function validateDocument(input) {
         const file = input && input.files ? input.files[0] : null;

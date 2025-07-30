@@ -152,11 +152,17 @@ class Validator
         }
 
         // メールアドレス
-        if (empty($data['email'])) {
+        // メールアドレス
+        $email = $data['email'] ?? '';
+
+        if (empty($email)) {
             $this->error_message['email'] = 'メールアドレスが入力されていません';
-        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        } elseif (preg_match('/^[\s　]|[\s　]$/u', $email)) {
+            $this->error_message['email'] = '先頭または末尾にスペースを含めないでください';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
         }
+
 
         error_log('バリデーションエラー: ' . print_r($this->error_message, true));
 
