@@ -88,8 +88,55 @@ if (!empty($_SESSION['input_data'])) {
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
+
     <script src="postalcodesearch.js"></script>
     <script src="contact.js"></script>
+
+    <style>
+        .birth-selects {
+            display: flex;
+            gap: 10px;
+            /* 年・月・日の間のスペース */
+            margin-top: 5px;
+            /* ラベルとの間隔 */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .birth-selects select.form-control {
+            width: 100px;
+            /* セレクトの幅 */
+            max-width: 100px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 0 0 auto;
+            /* フォーム全体を右に寄せる */
+            padding-left: 20px;
+        }
+
+        form>div>div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        form>div>div>label {
+            width: 110px;
+            margin-right: 12px;
+            text-align: right;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        form>div>div>input,
+        form>div>div>select,
+        form>div>div>.birth-selects {
+            flex-grow: 1;
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.forms['form'];
@@ -115,6 +162,7 @@ if (!empty($_SESSION['input_data'])) {
             });
         });
     </script>
+
 </head>
 
 <body>
@@ -177,57 +225,53 @@ if (!empty($_SESSION['input_data'])) {
                             value='3'
                             <?= ($old['gender_flag'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
+
+
                 </div>
-                <div>
-                    <label>生年月日<span>必須</span></label>
-                    <!-- 年プルダウン -->
+                <div class="form-group">
+                    <label>生年月日 <span>必須</span></label>
+
                     <div class="birth-selects">
                         <select name="birth_year" class="form-control">
                             <option value="">年</option>
                             <?php
                             $currentYear = (int)date('Y');
                             for ($y = $currentYear; $y >= 1900; $y--) :
-                                $sel = (isset($old['birth_year'])
-                                    && $old['birth_year'] == $y)
-                                    ? ' selected' : ''; ?>
-                                <option value="<?= $y ?>"
-                                    <?= $sel ?>><?= $y ?>年</option>
+                                $sel = (isset($old['birth_year']) && $old['birth_year'] == $y) ? ' selected' : '';
+                            ?>
+                                <option value="<?= $y ?>" <?= $sel ?>><?= $y ?>年</option>
                             <?php endfor ?>
                         </select>
 
-                        <!-- 月プルダウン -->
                         <select name="birth_month" class="form-control">
                             <option value="">月</option>
                             <?php
                             for ($m = 1; $m <= 12; $m++) :
-                                $sel = (isset($old['birth_month'])
-                                    && $old['birth_month'] == $m)
-                                    ? ' selected' : ''; ?>
-                                <option value="<?= $m ?>"
-                                    <?= $sel ?>><?= $m ?>月</option>
+                                $sel = (isset($old['birth_month']) && $old['birth_month'] == $m) ? ' selected' : '';
+                            ?>
+                                <option value="<?= $m ?>" <?= $sel ?>><?= $m ?>月</option>
                             <?php endfor ?>
                         </select>
 
-                        <!-- 日プルダウン -->
                         <select name="birth_day" class="form-control">
                             <option value="">日</option>
                             <?php
                             for ($d = 1; $d <= 31; $d++) :
-                                $sel = (isset($old['birth_day'])
-                                    && $old['birth_day'] == $d)
-                                    ? ' selected' : ''; ?>
-                                <option value="<?= $d ?>"
-                                    <?= $sel ?>><?= $d ?>日</option>
+                                $sel = (isset($old['birth_day']) && $old['birth_day'] == $d) ? ' selected' : '';
+                            ?>
+                                <option value="<?= $d ?>" <?= $sel ?>><?= $d ?>日</option>
                             <?php endfor ?>
                         </select>
                     </div>
+
+                    <!-- エラーメッセージ -->
                     <?php if (isset($error_message['birth_date'])) : ?>
                         <div class="birth-error"><?= htmlspecialchars($error_message['birth_date']) ?></div>
                     <?php endif; ?>
-
-
-
                 </div>
+
+
+
                 <div>
                     <label>郵便番号<span>必須</span></label>
                     <div id="postalWrapper" class="postal-row">
@@ -249,28 +293,31 @@ if (!empty($_SESSION['input_data'])) {
                 </div>
                 <div>
                     <label>住所<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="prefecture"
-                        id="prefecture"
-                        placeholder="都道府県"
-                        value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
-                    <input
-                        type="text"
-                        name="city_town"
-                        id="city_town"
-                        placeholder="市区町村・番地"
-                        value="<?= htmlspecialchars($old['city_town'] ?? '') ?>">
-                    <input
-                        type="text"
-                        name="building"
-                        placeholder="建物名・部屋番号  **省略可**"
-                        value="<?= htmlspecialchars($old['building'] ?? '') ?>">
+                    <div class="address-inputs">
+                        <input
+                            type="text"
+                            name="prefecture"
+                            id="prefecture"
+                            placeholder="都道府県"
+                            value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
+                        <input
+                            type="text"
+                            name="city_town"
+                            id="city_town"
+                            placeholder="市区町村・番地"
+                            value="<?= htmlspecialchars($old['city_town'] ?? '') ?>">
+                        <input
+                            type="text"
+                            name="building"
+                            placeholder="建物名・部屋番号  **省略可**"
+                            value="<?= htmlspecialchars($old['building'] ?? '') ?>">
+                    </div>
                     <?php if (isset($error_message['address'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['address']) ?></div>
                     <?php endif ?>
                 </div>
+
                 <div>
                     <label>電話番号<span>必須</span></label>
                     <input
