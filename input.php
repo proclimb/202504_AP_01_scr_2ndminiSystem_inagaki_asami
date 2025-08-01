@@ -135,6 +135,22 @@ if (!empty($_SESSION['input_data'])) {
         form>div>div>.birth-selects {
             flex-grow: 1;
         }
+
+
+
+        /* ...既存のstyleの下などに追記... */
+        .error-msg,
+        .error-msg2,
+        .birth-error {
+            color: red;
+            margin-left: 12px;
+            display: inline-block;
+            white-space: nowrap;
+            font-size: 0.9em;
+            vertical-align: middle;
+        }
+    </style>
+
     </style>
 
     <script>
