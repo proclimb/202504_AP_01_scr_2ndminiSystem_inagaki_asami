@@ -176,6 +176,7 @@ class Validator
 
         $response = @file_get_contents($apiUrl);
         if ($response === false) {
+            // APIが使えない場合は住所チェックをスルーするかfalse返すか検討
             return false;
         }
 
@@ -189,16 +190,30 @@ class Validator
             error_log("API: {$apiPrefecture} {$apiCityTown}");
             error_log("Input: {$prefecture} {$cityTown}");
 
-            // 引数（ユーザー入力）の整形
             $inputPrefecture = trim($prefecture);
             $inputCityTown = trim($cityTown);
 
-            // 完全一致でチェック
-            return $apiPrefecture === $inputPrefecture && $apiCityTown === $inputCityTown;
+            // 完全一致チェック
+            // 都道府県は完全一致
+            if ($apiPrefecture !== $inputPrefecture) {
+                $this->error_message['address'] = '郵便番号と都道府県が一致しません。';
+                return false;
+            }
+
+            // 市区町村＋町名（APIの値）が、入力の先頭に含まれていればOK
+            if (mb_strpos($inputCityTown, $apiCityTown) === 0) {
+                return true;
+            } else {
+                $this->error_message['address'] = '郵便番号と市区町村が一致しません。正しい住所を入力してください。';
+                return false;
+            }
         }
 
+        // API結果なし
+        $this->error_message['address'] = '郵便番号が見つかりません。正しい郵便番号を入力してください。';
         return false;
     }
+
 
 
     public function validateFiles(array $files): bool

@@ -50,22 +50,26 @@ session_start();
 $error_message = [];
 $old = [];
 
-if (!empty($_SESSION['input_data'])) {
-    // 確認画面などから戻ってきた場合、セッションのデータをセット
-    $old = $_SESSION['input_data'];
-} elseif (!empty($_POST)) {
-    // POSTデータがある場合はそれをセット
-    $old = $_POST;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST)) {
+        $old = $_POST;
 
-    // 入力チェックはここで行う
-    if ($validator->validateData("input", $_POST)) {
-        $_SESSION['input_data'] = $_POST;
-        header('Location: confirm.php');
-        exit();
+        if ($validator->validateData("input", $_POST)) {
+            $_SESSION['input_data'] = $_POST;
+            header('Location: confirm.php');
+            exit();
+        } else {
+            $error_message = $validator->getErrors();
+        }
     } else {
-        $error_message = $validator->getErrors();
+        // $_POSTが空のPOST送信があった場合の処理（必要ならエラーメッセージをセット）
+        $error_message[] = 'フォームが空です。';
     }
+} elseif (!empty($_SESSION['input_data'])) {
+    $old = $_SESSION['input_data'];
 }
+
+
 
 
 
