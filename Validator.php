@@ -49,29 +49,54 @@ class Validator
 
         // 生年月日
         // 生年月日
-        $year = (int)($data['birth_year'] ?? 0);
-        $month = (int)($data['birth_month'] ?? 0);
-        $day = (int)($data['birth_day'] ?? 0);
+        // 生年月日（birth_date）をチェック
+        $birthDateStr = trim($data['birth_date'] ?? '');
 
-
-
-        if ($year === 0 || $month === 0 || $day === 0) {
+        if (empty($birthDateStr)) {
             $this->error_message['birth_date'] = '生年月日が入力されていません';
         } else {
-            $currentYear = (int)date('Y');
-            if ($year < 1900 || $year > $currentYear) {
-                $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年～' . $currentYear . 'の間で入力してください）';
-            } elseif (!checkdate($month, $day, $year)) {
-                $this->error_message['birth_date'] = '生年月日が正しくありません';
-            } else {
-                $birthDate = \DateTime::createFromFormat('Y-m-d', sprintf('%04d-%02d-%02d', $year, $month, $day));
-                $today = new \DateTime('today');
+            // 日付形式が正しいかチェック（YYYY-MM-DD）
+            $birthDate = \DateTime::createFromFormat('Y-m-d', $birthDateStr);
+            $errors = \DateTime::getLastErrors();
 
+            if ($birthDate === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
+                $this->error_message['birth_date'] = '生年月日の形式が正しくありません（YYYY-MM-DDで入力してください）';
+            } else {
+                $today = new \DateTime('today');
                 if ($birthDate > $today) {
                     $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
                 }
+                $year = (int)$birthDate->format('Y');
+                if ($year < 1900 || $year > (int)$today->format('Y')) {
+                    $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年～現在の年の間で入力してください）';
+                }
             }
         }
+
+        // 新しいコード（生年月日チェック）
+        $birthDateStr = trim($data['birth_date'] ?? '');
+
+        if (empty($birthDateStr)) {
+            $this->error_message['birth_date'] = '生年月日が入力されていません';
+        } else {
+            // 日付形式が正しいかチェック（YYYY-MM-DD）
+            $birthDate = \DateTime::createFromFormat('Y-m-d', $birthDateStr);
+            $errors = \DateTime::getLastErrors();
+
+            if ($birthDate === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
+                $this->error_message['birth_date'] = '生年月日の形式が正しくありません（YYYY-MM-DDで入力してください）';
+            } else {
+                $today = new \DateTime('today');
+                if ($birthDate > $today) {
+                    $this->error_message['birth_date'] = '生年月日に未来日は指定できません';
+                }
+                $year = (int)$birthDate->format('Y');
+                if ($year < 1900 || $year > (int)$today->format('Y')) {
+                    $this->error_message['birth_date'] = '生年月日の「年」が不正です（1900年～現在の年の間で入力してください）';
+                }
+            }
+        }
+
 
 
 

@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const birthYear = form.querySelector('select[name="birth_year"]');
     const birthMonth = form.querySelector('select[name="birth_month"]');
     const birthDay = form.querySelector('select[name="birth_day"]');
+
+
     const nameInput = form.querySelector('input[name="name"]');
     const kanaInput = form.querySelector('input[name="kana"]');
     const postalInput = form.querySelector('input[name="postal_code"]');
@@ -100,14 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function validateBirthDate() {
-        const year = birthYear.value;
-        const month = birthMonth.value;
-        const day = birthDay.value;
-
-        clearError(birthDay, 'birth-error');
+        const year = birthYear?.value;
+        const month = birthMonth?.value;
+        const day = birthDay?.value;
 
         if (!year || !month || !day) {
-            return showError(birthDay, '生年月日をすべて選択してください', 'birth-error');
+            return showError(birthYear, '生年月日をすべて選択してください');
         }
 
         const birthDate = new Date(year, month - 1, day);
@@ -115,11 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
         today.setHours(0, 0, 0, 0);
 
         if (birthDate > today) {
-            return showError(birthDay, '生年月日に未来の日付は選択できません', 'birth-error');
+            return showError(birthYear, '未来の日付は選択できません');
         }
 
+        clearError(birthYear);
         return true;
     }
+
+
 
 
     function validatePostal() {
@@ -246,10 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     [birthYear, birthMonth, birthDay].forEach(select => {
-        if (select) {
-            select.addEventListener('change', validateBirthDate);
-        }
+        if (select) select.addEventListener('change', validateBirthDate);
     });
+
+
 
 
     if (prefectureInput) prefectureInput.addEventListener('input', validateAddress);
@@ -271,7 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emailInput && !validateEmail()) valid = false;
         if (doc1Input && !validateDocument(doc1Input)) valid = false;
         if (doc2Input && !validateDocument(doc2Input)) valid = false;
-        if (!validateBirthDate()) valid = false;
+        // if (!validateBirthDate()) valid = false;
+
         if (!valid) e.preventDefault();
 
     });

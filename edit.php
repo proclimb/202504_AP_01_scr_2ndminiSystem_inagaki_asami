@@ -299,6 +299,23 @@ session_destroy();
                 <button type="submit">削除</button>
             </form>
         </div>
+
+        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST') : ?>
+            <hr>
+            <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+                <h3>POSTデータ:</h3>
+                <pre><?php print_r($_POST); ?></pre>
+
+                <h3>エラーメッセージ:</h3>
+                <pre><?php print_r($error_message); ?></pre>
+
+                <h3>ファイルのエラー:</h3>
+                <pre><?php print_r($error_message_files); ?></pre>
+            </div>
+        <?php endif; ?>
+
+
+
     </body>
 
 </html>

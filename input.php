@@ -93,8 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
 
-    <script src="postalcodesearch.js"></script>
-    <script src="contact.js"></script>
+
 
     <style>
         .birth-selects {
@@ -252,7 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label>生年月日 <span>必須</span></label>
 
                     <div class="birth-selects">
-                        <select name="birth_year" class="form-control">
+                        <select name="birth_year" id="birth_year" class="form-control">
+
                             <option value="">年</option>
                             <?php
                             $currentYear = (int)date('Y');
@@ -263,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endfor ?>
                         </select>
 
-                        <select name="birth_month" class="form-control">
+                        <select name="birth_month" id="birth_month" class="form-control">
                             <option value="">月</option>
                             <?php
                             for ($m = 1; $m <= 12; $m++) :
@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endfor ?>
                         </select>
 
-                        <select name="birth_day" class="form-control">
+                        <select name="birth_day" id="birth_day" class="form-control">
                             <option value="">日</option>
                             <?php
                             for ($d = 1; $d <= 31; $d++) :
@@ -369,6 +369,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </a>
         </form>
     </div>
+
+    <script src="postalcodesearch.js"></script>
+    <script src="contact.js"></script>
+
 </body>
 
 </html>
