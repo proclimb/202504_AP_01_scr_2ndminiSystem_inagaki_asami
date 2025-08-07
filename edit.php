@@ -201,8 +201,9 @@ session_destroy();
                                 <?= htmlspecialchars($error_message['postal_code']) ?></div>
                         <?php endif ?>
                     </div>
-                    <div>
-                        <label>住所<span>必須</span></label>
+
+                    <label>住所<span>必須</span></label>
+                    <div class="address-block">
                         <input
                             type="text"
                             name="prefecture"
@@ -222,9 +223,13 @@ session_destroy();
                             value="<?= htmlspecialchars($_POST['building'] ?? '') ?>">
                         <?php if (isset($error_message['address'])) : ?>
                             <div class="error-msg">
-                                <?= htmlspecialchars($error_message['address']) ?></div>
+                                <?= htmlspecialchars($error_message['address']) ?>
+                            </div>
                         <?php endif ?>
                     </div>
+
+
+
                     <div>
                         <label>電話番号<span>必須</span></label>
                         <input
@@ -300,19 +305,6 @@ session_destroy();
             </form>
         </div>
 
-        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST') : ?>
-            <hr>
-            <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-                <h3>POSTデータ:</h3>
-                <pre><?php print_r($_POST); ?></pre>
-
-                <h3>エラーメッセージ:</h3>
-                <pre><?php print_r($error_message); ?></pre>
-
-                <h3>ファイルのエラー:</h3>
-                <pre><?php print_r($error_message_files); ?></pre>
-            </div>
-        <?php endif; ?>
 
 
 

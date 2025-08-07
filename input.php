@@ -2,6 +2,7 @@
 
 
 
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 /**
@@ -96,6 +97,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     <style>
+        input[name="tel"] {
+            width: 250px;
+            /* 幅を250ピクセルに固定 */
+            min-width: 250px;
+            /* これより小さくならないように */
+            box-sizing: border-box;
+            /* 枠や内側の余白も幅に含める */
+        }
+
+        .error-msg {
+            min-height: 1.2em;
+            /* エラーメッセージがなくても高さを確保 */
+            color: red;
+            /* エラーメッセージの色は赤 */
+            font-size: 0.9em;
+            /* 少し小さめの文字 */
+        }
+
+
         .birth-selects {
             display: flex;
             gap: 10px;

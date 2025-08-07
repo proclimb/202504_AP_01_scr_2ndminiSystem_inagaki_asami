@@ -256,9 +256,10 @@ form>div input[type=email],
 form>div textarea,
 form>div select {
     display: block;
-    min-width: 405px;
-    max-width: 405px;
-    float: right;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    float: none;
     height: 38px;
     padding: 6px 12px;
     font-size: 14px;
@@ -276,12 +277,12 @@ form>div select {
     margin: 0 15px;
 }
 
+
 /* 新規追加 */
 form>div input[type=text].half-width {
     display: block;
     min-width: 244px;
     max-width: 244px;
-    float: right;
     height: 38px;
     padding: 6px 12px;
     font-size: 14px;
@@ -723,6 +724,134 @@ input.readonly-field[type="text"] {
     margin-bottom: 20px;
 }
 
+
+/* フォーム行全体を横並びにする */
+form>div>div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px 0;
+}
+
+/* ラベル（名前、メールなど）を左側に固定 */
+form>div>div label {
+    width: 150px;
+    margin-right: 10px;
+    text-align: right;
+    float: none;
+}
+
+/* 入力欄を右側に配置して柔軟に伸縮 */
+form>div>div input[type="text"],
+form>div>div input[type="email"],
+form>div>div input[type="tel"],
+form>div>div select,
+form>div>div textarea {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    float: none;
+}
+
+/* 郵便番号行の横並び調整 */
+.postal-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* 半幅入力欄 */
+form input.half-width {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+}
+
+
+/* 必須マークの位置調整 */
+body>div label span {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+/* ファイルアップロード欄の横並び調整 */
+form>div>div.file-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 10px 0;
+}
+
+/* ファイル選択ボタンのスタイル調整 */
+form>div>div.file-upload-row label {
+    width: 150px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+form>div>div.file-upload-row input[type="file"] {
+    flex: 1;
+    min-width: 0;
+}
+
+.postal-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.half-width {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.address-inputs {
+    width: 400px;
+    /* 好きな幅に調整 */
+    max-width: 100%;
+    /* 画面幅を超えないように */
+    margin: 0 auto;
+    /* 真ん中寄せにしたい場合 */
+}
+
+
+.address-inputs input {
+    display: block;
+    width: 100%;
+    /* max-width: 400px;  削除 */
+    min-width: 250px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* グローバル入力欄（幅の指定なしに） */
+input[type="text"] {
+    height: 40px;
+    font-size: 16px;
+    padding: 8px;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+/* 住所欄だけ縦にして幅100% */
+.address-block input[type="text"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.address-block input {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    /* お好みで調整 */
+}
 
 
 
