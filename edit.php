@@ -1,42 +1,42 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-
-//  DB接続情報、クラス定義の読み込み
+ob_start();
 require_once 'Db.php';
 require_once 'User.php';
 require_once 'Validator.php';
 
 use App\Validator;
 
-
 $pdo = Db::getPdoInstance();
 
 session_cache_limiter('none');
 session_start();
 
-// 変数の初期化
 $error_message = [];
 $error_message_files = [];
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    // ダッシュボードから送信した変数を設定
-    $id = $_GET['id'];
-    // Userクラスをインスタンス化
-    $user = new User($pdo);
+$id = $_GET['id'] ?? $_POST['id'] ?? null;
+$user = new User($pdo);
 
-    // UserクラスのfindById()メソッドで1件検索
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $_POST = $user->findById($id);
+    $_POST['birth_date_raw'] = $_POST['birth_date'] ?? '';
 } else {
-    // 入力項目のチェック(サーバーサイドバリデーション)
-    // Validatorクラスをインスタンス化
+    if (empty($_POST['birth_date']) && !empty($_POST['birth_date_raw'])) {
+        $_POST['birth_date'] = $_POST['birth_date_raw'];
+    }
+
+    // ✅ バリデーション実行（ここでチェック）
     $validator = new Validator();
     $isValidData  = $validator->validateData("edit", $_POST);
     $isValidFiles = $validator->validateFiles($_FILES);
 
     if ($isValidData && $isValidFiles) {
-        // バリデーションチェックに成功した場合
-        // アップロードファイルをサーバーに一時保存
+        // ✅ 成功時のみファイル保存処理 & セッションセット
         $uploadDir = __DIR__ . '/uploads/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -59,22 +59,29 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             }
         }
 
-        // セッションに入力データを保存
         $_SESSION['document_data'] = $documentData;
         $_SESSION['edit_data'] = $_POST;
 
-        // 画面遷移
         session_write_close();
-        header('Location:update.php');
+
+        error_log('Redirecting to update.php');
+
+        header('Location: update.php');
         exit;
     } else {
+        // ❌ バリデーションエラー時はエラーメッセージを表示
         $error_message = $validator->getErrors();
         $error_message_files = $validator->getErrorsFiles();
+        echo "<pre>";
+        print_r($error_message);
+        print_r($error_message_files);
+        echo "</pre>";
+        exit;
     }
 }
 
 unset($_FILES);
-session_destroy();
+
 // 4.html の描画
 ?>
 <!DOCTYPE html>
@@ -159,9 +166,10 @@ session_destroy();
                                     ? 'checked' : '' ?>>その他</label>
                     </div>
                     <div>
+
                         <label>生年月日<span>必須</span></label>
                         <?php
-                        $birthDateRaw = $_POST['birth_date'] ?? '';
+                        $birthDateRaw = $_POST['birth_date'] ?? $_POST['birth_date_raw'] ?? '';
                         $birthDateFormatted = '';
                         if (!empty($birthDateRaw) && $birthDateRaw !== '0000-00-00' && strtotime($birthDateRaw)) {
                             $birthDateFormatted = date('Y年n月j日', strtotime($birthDateRaw));
@@ -311,3 +319,6 @@ session_destroy();
     </body>
 
 </html>
+<?php
+ob_end_flush();
+?>

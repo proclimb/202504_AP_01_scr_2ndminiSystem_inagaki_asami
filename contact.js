@@ -9,12 +9,20 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    const form = document.querySelector('form[name="form"]');
+    if (form) {
+        console.log('フォーム取得できています');
+    } else {
+        console.log('フォームが取得できていません！');
+    }
+
+
     function hasLeadingOrTrailingSpace(str) {
         return /^[\s\u3000]|[\s\u3000]$/.test(str);
     }
 
 
-    const form = document.querySelector('form[name="form"]');
+
     if (!form) return;
     const birthYear = form.querySelector('select[name="birth_year"]');
     const birthMonth = form.querySelector('select[name="birth_month"]');
@@ -265,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // フォーム送信時のバリデーションチェック
     form.addEventListener('submit', (e) => {
+        console.log('submitイベント発火');
         let valid = true;
         if (nameInput && !validateName()) valid = false;
         if (kanaInput && !validateKana()) valid = false;
@@ -276,7 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (doc2Input && !validateDocument(doc2Input)) valid = false;
         // if (!validateBirthDate()) valid = false;
 
-        if (!valid) e.preventDefault();
-
+        if (!valid) {
+            console.log('バリデーション失敗で送信中止');
+            e.preventDefault();
+        } else {
+            console.log('バリデーション成功！送信されます');
+        }
     });
 });
