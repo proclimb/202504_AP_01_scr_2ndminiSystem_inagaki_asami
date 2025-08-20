@@ -839,21 +839,27 @@ input[type="text"] {
     line-height: 1.5;
 }
 
-/* 住所欄だけ縦にして幅100% */
-.address-block input[type="text"] {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
+.address-block {
+    display: flex;
+    flex-direction: column;
+    /* ← これが超重要！縦並びにする */
+    gap: 10px;
+    /* 各入力欄の間に余白をつける */
 }
 
 .address-block input {
     display: block;
     width: 100%;
-    margin-bottom: 8px;
-    /* お好みで調整 */
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
-
+.address-block input::placeholder {
+    color: #999;
+    font-size: 14px;
+}
 
 /* -------------------------------------------------------------------
 ↑ ここまで変更・追加箇所
