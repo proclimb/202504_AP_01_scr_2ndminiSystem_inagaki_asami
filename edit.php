@@ -90,6 +90,7 @@ unset($_FILES);
 <head>
     <meta charset="UTF-8">
     <title>mini System</title>
+    <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
     <script src="contact.js"></script>
@@ -205,25 +206,29 @@ unset($_FILES);
                     </div>
 
 
-                    <div>
-                        <label>郵便番号<span>必須</span></label>
-                        <div id="postalWrapper" class="postal-row">
+                    <div class="form-row zip">
+                        <label for="postal_code">郵便番号<span>必須</span></label>
+                        <div class="postal-wrapper">
                             <input
                                 class="half-width"
                                 type="text"
                                 name="postal_code"
                                 id="postal_code"
                                 placeholder="例）100-0001"
-                                value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
-                            <button type="button"
-                                class="postal-code-search"
-                                id="searchAddressBtn">住所検索</button>
+                                value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>"
+                                onKeyUp="AjaxZip3.zip2addr(this, '', 'pref', 'addr');">
+
+                            <button type="button" class="postal-code-search" id="searchAddressBtn">住所検索</button>
                         </div>
-                        <?php if (isset($error_message['postal_code'])) : ?>
-                            <div class="error-msg2">
-                                <?= htmlspecialchars($error_message['postal_code']) ?></div>
-                        <?php endif ?>
                     </div>
+
+
+
+
+
+                    <?php if (isset($error_message['postal_code'])) : ?>
+                        <div class="error-msg2"><?= htmlspecialchars($error_message['postal_code']) ?></div>
+                    <?php endif ?>
 
                     <label>住所<span>必須</span></label>
                     <div class="address-block">

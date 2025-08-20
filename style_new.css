@@ -437,10 +437,9 @@ textarea+div {
     color: red;
 }
 
-/* 新規追加 */
 .error-msg2 {
-    color: red;
-    margin-left: 20px;
+    margin-left: 140px !important;
+    color: red !important;
 }
 
 .birth-selects {
@@ -465,12 +464,6 @@ textarea+div {
 
 
 
-
-
-.postal-row {
-    display: flex;
-    flex-wrap: wrap;
-}
 
 button.postal-code-search {
     padding: 8px 12px;
@@ -755,9 +748,9 @@ form>div>div textarea {
 
 /* 郵便番号行の横並び調整 */
 .postal-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
 }
 
 /* 半幅入力欄 */
@@ -798,15 +791,10 @@ form>div>div.file-upload-row input[type="file"] {
     min-width: 0;
 }
 
-.postal-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
+
 
 .half-width {
-    flex: 1 1 0;
-    min-width: 0;
+    width: 120px !important;
 }
 
 .address-inputs {

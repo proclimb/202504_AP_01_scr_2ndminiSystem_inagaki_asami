@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>mini System</title>
+    <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <link rel="stylesheet" href="style_new.css">
 
 
@@ -321,7 +322,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             name="postal_code"
                             id="postal_code"
                             placeholder="例）100-0001"
-                            value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>">
+                            value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>"
+                            onKeyUp="AjaxZip3.zip2addr(this, '', 'prefecture', 'city_town');">
                         <button type="button"
                             class="postal-code-search"
                             id="searchAddressBtn">住所検索</button>
@@ -331,6 +333,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?= htmlspecialchars($error_message['postal_code']) ?></div>
                     <?php endif ?>
                 </div>
+
+
+
+
                 <div>
                     <label>住所<span>必須</span></label>
                     <div class="address-inputs">
