@@ -178,6 +178,7 @@ unset($_FILES);
                         <!-- 表示用（編集不可） -->
                         <input
                             type="text"
+                            name="birth_date"
                             value="<?= htmlspecialchars($birthDateFormatted) ?>"
                             readonly
                             class="readonly-field">
@@ -187,6 +188,20 @@ unset($_FILES);
                             type="hidden"
                             name="birth_date"
                             value="<?= htmlspecialchars($birthDateRaw) ?>">
+
+                        <?php
+                        // birthDateRaw が "YYYY-MM-DD" 形式であることを前提に分割
+                        $birthYear = '';
+                        $birthMonth = '';
+                        $birthDay = '';
+                        if (!empty($birthDateRaw) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthDateRaw)) {
+                            list($birthYear, $birthMonth, $birthDay) = explode('-', $birthDateRaw);
+                        }
+                        ?>
+
+                        <input type="hidden" name="birth_year" value="<?= htmlspecialchars($birthYear) ?>">
+                        <input type="hidden" name="birth_month" value="<?= htmlspecialchars($birthMonth) ?>">
+                        <input type="hidden" name="birth_day" value="<?= htmlspecialchars($birthDay) ?>">
                     </div>
 
 
