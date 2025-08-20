@@ -216,7 +216,7 @@ unset($_FILES);
                                 id="postal_code"
                                 placeholder="例）100-0001"
                                 value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>"
-                                onKeyUp="AjaxZip3.zip2addr(this, '', 'pref', 'addr');">
+                                onKeyUp="AjaxZip3.zip2addr(this, '', 'prefecture', 'city_town');">
 
                             <button type="button" class="postal-code-search" id="searchAddressBtn">住所検索</button>
                         </div>
