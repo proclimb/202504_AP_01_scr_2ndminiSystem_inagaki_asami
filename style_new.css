@@ -435,31 +435,18 @@ textarea+div {
 /* 8636 */
 .error-msg {
     color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    min-height: 1em;
+    /* これを必ず入れる */
 }
+
 
 .error-msg2 {
     margin-left: 140px !important;
     color: red !important;
 }
 
-.birth-selects {
-    display: flex;
-    gap: 1px;
-    margin-top: 5px;
-    width: auto;
-    box-sizing: border-box;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.birth-selects select {
-    margin: 0;
-    padding: 4px 6px;
-    width: auto;
-    min-width: 60px;
-    max-width: 100px;
-    box-sizing: border-box;
-}
 
 
 
@@ -533,7 +520,7 @@ input.readonly-field[type="text"] {
 }
 
 /* -------------------------------------------------------------------
-   ↓ ここから変更・追加箇所
+↓ ここから変更・追加箇所
    ------------------------------------------------------------------- */
 
 /* 【3】共通テーブル（dashboard.php と Csvpreview.php で使い回し可） */
@@ -651,7 +638,7 @@ input.readonly-field[type="text"] {
 }
 
 /* ---------------------------------------------------
-   dashboard.php 用の追加スタイル
+dashboard.php 用の追加スタイル
    --------------------------------------------------- */
 
 .name-sreach form {
@@ -700,22 +687,37 @@ input.readonly-field[type="text"] {
 }
 
 /* 生年月日のエラーメッセージ位置を他と揃えるための調整 */
-.birth-error {
-    color: red;
-    font-size: 14px;
-    margin-top: 5px;
+.birth-selects-wrapper {
     display: block;
-    white-space: normal;
-    /* 折り返しOK */
-    word-break: break-word;
-    /* 単語途中でも改行OK */
-    max-width: 100%;
-    /* 幅を広く使えるように */
+    width: 100%;
 }
 
 .birth-selects {
-    margin-bottom: 20px;
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
 }
+
+.birth-selects select {
+    margin: 0;
+    padding: 4px 6px;
+    min-width: 60px;
+    max-width: 100px;
+    box-sizing: border-box;
+}
+
+.birth-error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+    max-width: 100%;
+    clear: both;
+}
+
+
 
 
 /* フォーム行全体を横並びにする */
@@ -734,17 +736,6 @@ form>div>div label {
     float: none;
 }
 
-/* 入力欄を右側に配置して柔軟に伸縮 */
-form>div>div input[type="text"],
-form>div>div input[type="email"],
-form>div>div input[type="tel"],
-form>div>div select,
-form>div>div textarea {
-    flex: 1;
-    min-width: 0;
-    margin: 0;
-    float: none;
-}
 
 /* 郵便番号行の横並び調整 */
 .postal-row {
@@ -752,6 +743,13 @@ form>div>div textarea {
     gap: 10px !important;
     align-items: center !important;
 }
+
+.postal-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 
 /* 半幅入力欄 */
 form input.half-width {
@@ -848,6 +846,9 @@ input[type="text"] {
     color: #999;
     font-size: 14px;
 }
+
+
+
 
 /* -------------------------------------------------------------------
 ↑ ここまで変更・追加箇所

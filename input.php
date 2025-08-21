@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
                 <div>
-                    <label>お名前<span>必須</span></label>
+                    <label>お名前<span class="required">必須</span></label>
                     <input
                         type="text"
                         name="name"
@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endif ?>
                 </div>
                 <div>
-                    <label>ふりがな<span>必須</span></label>
+                    <label>ふりがな<span class="required">必須</span></label>
                     <input
                         type="text"
                         name="kana"
@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endif ?>
                 </div>
                 <div>
-                    <label>性別<span>必須</span></label>
+                    <label>性別<span class="required">必須</span></label>
                     <?php $gender = $old['gender_flag'] ?? '1'; ?>
                     <label class="gender">
                         <input
@@ -265,56 +265,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             value='3'
                             <?= ($old['gender_flag'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
-
-
                 </div>
+
+
                 <div class="form-group">
-                    <label>生年月日 <span>必須</span></label>
+                    <label>生年月日 <span class="required">必須</span></label>
+                    <!-- 横並びのセレクトボックスたち -->
+                    <div class="birth-selects-wrapper">
+                        <div class="birth-selects">
+                            <select name="birth_year" class="form-control">
+                                <option value="">年</option>
+                                <?php
+                                $currentYear = (int)date('Y');
+                                for ($y = $currentYear; $y >= 1900; $y--) :
+                                    $sel = (isset($old['birth_year']) && $old['birth_year'] == $y) ? ' selected' : '';
+                                ?>
+                                    <option value="<?= $y ?>" <?= $sel ?>><?= $y ?>年</option>
+                                <?php endfor ?>
+                            </select>
 
-                    <div class="birth-selects">
-                        <select name="birth_year" id="birth_year" class="form-control">
+                            <select name="birth_month" class="form-control">
+                                <option value="">月</option>
+                                <?php
+                                for ($m = 1; $m <= 12; $m++) :
+                                    $sel = (isset($old['birth_month']) && $old['birth_month'] == $m) ? ' selected' : '';
+                                ?>
+                                    <option value="<?= $m ?>" <?= $sel ?>><?= $m ?>月</option>
+                                <?php endfor ?>
+                            </select>
 
-                            <option value="">年</option>
-                            <?php
-                            $currentYear = (int)date('Y');
-                            for ($y = $currentYear; $y >= 1900; $y--) :
-                                $sel = (isset($old['birth_year']) && $old['birth_year'] == $y) ? ' selected' : '';
-                            ?>
-                                <option value="<?= $y ?>" <?= $sel ?>><?= $y ?>年</option>
-                            <?php endfor ?>
-                        </select>
-
-                        <select name="birth_month" id="birth_month" class="form-control">
-                            <option value="">月</option>
-                            <?php
-                            for ($m = 1; $m <= 12; $m++) :
-                                $sel = (isset($old['birth_month']) && $old['birth_month'] == $m) ? ' selected' : '';
-                            ?>
-                                <option value="<?= $m ?>" <?= $sel ?>><?= $m ?>月</option>
-                            <?php endfor ?>
-                        </select>
-
-                        <select name="birth_day" id="birth_day" class="form-control">
-                            <option value="">日</option>
-                            <?php
-                            for ($d = 1; $d <= 31; $d++) :
-                                $sel = (isset($old['birth_day']) && $old['birth_day'] == $d) ? ' selected' : '';
-                            ?>
-                                <option value="<?= $d ?>" <?= $sel ?>><?= $d ?>日</option>
-                            <?php endfor ?>
-                        </select>
+                            <select name="birth_day" class="form-control">
+                                <option value="">日</option>
+                                <?php
+                                for ($d = 1; $d <= 31; $d++) :
+                                    $sel = (isset($old['birth_day']) && $old['birth_day'] == $d) ? ' selected' : '';
+                                ?>
+                                    <option value="<?= $d ?>" <?= $sel ?>><?= $d ?>日</option>
+                                <?php endfor ?>
+                            </select>
+                        </div>
+                        <!-- エラーメッセージを同じラッパーの中に入れる -->
+                        <?php if (isset($error_message['birth_date'])) : ?>
+                            <div class="birth-error"><?= htmlspecialchars($error_message['birth_date']) ?></div>
+                        <?php endif; ?>
                     </div>
-
-                    <!-- エラーメッセージ -->
-                    <?php if (isset($error_message['birth_date'])) : ?>
-                        <div class="birth-error"><?= htmlspecialchars($error_message['birth_date']) ?></div>
-                    <?php endif; ?>
                 </div>
-
 
 
                 <div>
-                    <label>郵便番号<span>必須</span></label>
+                    <label>郵便番号<span class="required">必須</span></label>
                     <div id="postalWrapper" class="postal-row">
                         <input
                             class="half-width"
@@ -338,7 +337,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
                 <div>
-                    <label>住所<span>必須</span></label>
+                    <label>住所<span class="required">必須</span></label>
                     <div class="address-inputs">
                         <input
                             type="text"
@@ -365,7 +364,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div>
-                    <label>電話番号<span>必須</span></label>
+                    <label>電話番号<span class="required">必須</span></label>
                     <input
                         type="text"
                         name="tel"
@@ -377,7 +376,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endif ?>
                 </div>
                 <div>
-                    <label>メールアドレス<span>必須</span></label>
+                    <label>メールアドレス<span class="required">必須</span></label>
                     <input
                         type="text"
                         name="email"
